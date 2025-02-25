@@ -1,17 +1,28 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PizzaBackend.Models
 {
     public class Pizza
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(100)]
         public string PizzaName { get; set; } = string.Empty;
+
+        [MaxLength(500)]
         public string PizzaDescription { get; set; } = string.Empty;
+
+        [Required]
+        [Range(0, double.MaxValue)]
         public decimal PizzaPrice { get; set; }
-        public string PizzaImgUrl {  get; set; } = string.Empty;
 
-        public DateTime PizzaCreatedDate { get; set; } = DateTime.Now;
+        [Required]
+        public string PizzaImgUrl { get; set; } = string.Empty;
 
+        [Required]
+        public DateTime PizzaCreatedDate { get; set; } = DateTime.UtcNow;
     }
 }
