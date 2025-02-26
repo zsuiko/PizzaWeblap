@@ -15,7 +15,7 @@ namespace PizzaBackend.Models
         public int PizzaId { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue)]
+        [Range(1, 50)]
         public int Quantity { get; set; } = 1;
 
         [Required]
