@@ -20,17 +20,19 @@ namespace PizzaBackend.Models
         public int TotalPrice { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime OrderCreatedAt { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("UserId")]
         public User? User { get; set; }
+
+        public List<Cart> CartItems { get; set; } = new();
     }
 
     public enum OrderStatus
     {
-        Pending,
-        Preparing,
-        Completed,
-        Cancelled
+        Pending, //0
+        Preparing, //1
+        Completed, //2
+        Cancelled //3
     }
 }

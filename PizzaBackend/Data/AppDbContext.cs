@@ -1,4 +1,4 @@
-﻿using PizzaBackend.Models;
+using PizzaBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -17,6 +17,9 @@ namespace PizzaBackend.Data
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Cart> Carts { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
