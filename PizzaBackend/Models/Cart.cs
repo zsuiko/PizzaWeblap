@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PizzaBackend.Models
@@ -28,4 +28,4 @@ namespace PizzaBackend.Models
         [ForeignKey("PizzaId")]
         public Pizza? Pizza { get; set; }
     }
-}
+
