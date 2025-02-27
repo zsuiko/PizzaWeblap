@@ -16,8 +16,8 @@ namespace PizzaBackend.Models
         public string PizzaDescription { get; set; } = string.Empty;
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public decimal PizzaPrice { get; set; }
+        [Range(0, 9999)]
+        public int PizzaPrice { get; set; }
 
         [Required]
         public string PizzaImgUrl { get; set; } = string.Empty;

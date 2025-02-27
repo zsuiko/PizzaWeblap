@@ -20,7 +20,7 @@ namespace PizzaBackend.Models
         public int TotalPrice { get; set; }
 
         [Required]
-        public DateTime OrderCreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime OrderCreatedAt { get; set; } = DateTime.Now;
 
         [ForeignKey("UserId")]
         public User? User { get; set; }
