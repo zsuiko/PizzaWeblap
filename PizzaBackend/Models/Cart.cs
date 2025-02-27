@@ -20,7 +20,7 @@ namespace PizzaBackend.Models
 
         [Required]
         [Range(0, double.MaxValue)]
-        public decimal UnitPrice { get; set; } // Az adott pizza ára a rendeléskor
+        public int UnitPrice { get; set; } // Az adott pizza ára a rendeléskor
 
         [ForeignKey("OrderId")]
         public Order? Order { get; set; }
@@ -28,4 +28,5 @@ namespace PizzaBackend.Models
         [ForeignKey("PizzaId")]
         public Pizza? Pizza { get; set; }
     }
+}
 

@@ -17,7 +17,7 @@ namespace PizzaBackend.Models
 
         [Required]
         [Range(0, 9999)]
-        public decimal PizzaPrice { get; set; }
+        public int PizzaPrice { get; set; }
 
         [Required]
         public string PizzaImgUrl { get; set; } = string.Empty;

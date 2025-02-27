@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaBackend.Data;
+using PizzaBackend.DTOs;
+using PizzaBackend.Extensions;
 using PizzaBackend.Models;
 
 namespace PizzaBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/orders")]
     [ApiController]
     public class OrdersController : ControllerBase
     {
@@ -21,88 +18,101 @@ namespace PizzaBackend.Controllers
             _context = context;
         }
 
-        // GET: api/Orders
+        // GET: api/orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            var orders = await _context.Orders
+                .Include(o => o.CartItems)
+                .ThenInclude(c => c.Pizza)
+                .ToListAsync();
+
+            return Ok(orders.Select(o => o.ToDto()));
         }
 
-        // GET: api/Orders/5
+        // GET: api/orders/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public async Task<ActionResult<OrderDto>> GetOrderById(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.CartItems)
+                .ThenInclude(c => c.Pizza)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
-            if (order == null)
-            {
-                return NotFound();
-            }
+            if (order == null) return NotFound(new { message = "Order not found" });
 
-            return order;
+            return Ok(order.ToDto());
         }
 
-        // PUT: api/Orders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(int id, Order order)
-        {
-            if (id != order.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(order).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Orders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/orders
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<ActionResult<OrderDto>> PostOrder(CreateOrderDto createOrderDto)
         {
+            var user = await _context.Users.FindAsync(createOrderDto.UserId);
+            if (user == null) return BadRequest(new { message = "User not found" });
+
+            var order = new Order
+            {
+                UserId = createOrderDto.UserId,
+                Status = OrderStatus.Pending,
+                CartItems = new List<Cart>()
+            };
+
+            foreach (var cartDto in createOrderDto.CartItems)
+            {
+                var pizza = await _context.Pizzas.FindAsync(cartDto.PizzaId);
+                if (pizza == null) return BadRequest(new { message = $"Pizza with ID {cartDto.PizzaId} not found" });
+
+                order.CartItems.Add(new Cart
+                {
+                    Order = order,
+                    Pizza = pizza,
+                    PizzaId = cartDto.PizzaId,
+                    Quantity = cartDto.Quantity,
+                    UnitPrice = pizza.PizzaPrice
+                });
+            }
+
+            order.TotalPrice = (int)order.CartItems.Sum(c => c.Quantity * c.UnitPrice);
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order.ToDto());
         }
 
-        // DELETE: api/Orders/5
+        // PUT: api/orders/5 (rendelés státuszának módosítása)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutOrder(int id, OrderDto orderDto)
+        {
+            if (id != orderDto.Id) return BadRequest(new { message = "ID mismatch" });
+
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null) return NotFound(new { message = "Order not found" });
+
+            if (Enum.TryParse(orderDto.Status, out OrderStatus newStatus))
+            {
+                order.Status = newStatus;
+            }
+            else
+            {
+                return BadRequest(new { message = "Invalid order status" });
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // DELETE: api/orders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
+            if (order == null) return NotFound(new { message = "Order not found" });
 
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool OrderExists(int id)
-        {
-            return _context.Orders.Any(e => e.Id == id);
         }
     }
 }
