@@ -15,7 +15,7 @@ namespace PizzaBackend.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Pizza> Pizzas { get; set; }
-
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Cart> Carts { get; set; }
     }
 }
