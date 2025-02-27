@@ -18,6 +18,10 @@ namespace PizzaBackend.Models
         public string UserEmail { get; set; } = string.Empty;
 
         [Required]
+        [MaxLength(100)]
+        public string City { get; set; } = string.Empty ;
+
+        [Required]
         [MaxLength(300)]
         public string Address { get; set; } = string.Empty;
 

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PizzaBackend.Models
@@ -15,12 +15,12 @@ namespace PizzaBackend.Models
         public int PizzaId { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue)]
+        [Range(1, 50)]
         public int Quantity { get; set; } = 1;
 
         [Required]
         [Range(0, double.MaxValue)]
-        public decimal UnitPrice { get; set; } // Az adott pizza ára a rendeléskor
+        public int UnitPrice { get; set; } // Az adott pizza ára a rendeléskor
 
         [ForeignKey("OrderId")]
         public Order? Order { get; set; }
@@ -29,3 +29,4 @@ namespace PizzaBackend.Models
         public Pizza? Pizza { get; set; }
     }
 }
+

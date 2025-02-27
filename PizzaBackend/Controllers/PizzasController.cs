@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaBackend.Data;
+using PizzaBackend.DTOs;
+using PizzaBackend.Extensions;
 using PizzaBackend.Models;
 
 namespace PizzaBackend.Controllers
@@ -23,65 +20,67 @@ namespace PizzaBackend.Controllers
 
         // GET: api/Pizzas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pizza>>> GetPizzas()
+        public async Task<ActionResult<IEnumerable<PizzaDto>>> GetPizzas()
         {
-            return await _context.Pizzas.ToListAsync();
+            var pizzas = await _context.Pizzas.ToListAsync();
+            return Ok(pizzas.Select(p => p.ToDto()));
         }
 
         // GET: api/Pizzas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pizza>> GetPizza(int id)
+        public async Task<ActionResult<PizzaDto>> GetPizza(int id)
         {
             var pizza = await _context.Pizzas.FindAsync(id);
 
             if (pizza == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Pizza not found" });
             }
 
-            return pizza;
-        }
-
-        // PUT: api/Pizzas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPizza(int id, Pizza pizza)
-        {
-            if (id != pizza.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(pizza).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PizzaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(pizza.ToDto());
         }
 
         // POST: api/Pizzas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Pizza>> PostPizza(Pizza pizza)
+        public async Task<ActionResult<PizzaDto>> PostPizza(CreatePizzaDto createPizzaDto)
         {
+            var pizza = new Pizza
+            {
+                PizzaName = createPizzaDto.PizzaName,
+                PizzaDescription = createPizzaDto.PizzaDescription,
+                PizzaPrice = (int)createPizzaDto.PizzaPrice,
+                PizzaImgUrl = createPizzaDto.PizzaImgUrl
+            };
+
             _context.Pizzas.Add(pizza);
             await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetPizza), new { id = pizza.Id }, pizza.ToDto());
+        }
 
-            return CreatedAtAction("GetPizza", new { id = pizza.Id }, pizza);
+        // PUT: api/Pizzas/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPizza(int id, PizzaDto pizzaDto)
+        {
+            if (id != pizzaDto.Id)
+            {
+                return BadRequest(new { message = "ID mismatch" });
+            }
+
+            var pizza = await _context.Pizzas.FindAsync(id);
+            if (pizza == null)
+            {
+                return NotFound(new { message = "Pizza not found" });
+            }
+
+            pizza.PizzaName = pizzaDto.PizzaName;
+            pizza.PizzaDescription = pizzaDto.PizzaDescription;
+            pizza.PizzaPrice = (int)pizzaDto.PizzaPrice;
+            pizza.PizzaImgUrl = pizzaDto.PizzaImgUrl;
+
+            _context.Entry(pizza).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // DELETE: api/Pizzas/5
@@ -91,18 +90,12 @@ namespace PizzaBackend.Controllers
             var pizza = await _context.Pizzas.FindAsync(id);
             if (pizza == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Pizza not found" });
             }
 
             _context.Pizzas.Remove(pizza);
             await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool PizzaExists(int id)
-        {
-            return _context.Pizzas.Any(e => e.Id == id);
         }
     }
 }
