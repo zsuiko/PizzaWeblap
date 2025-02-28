@@ -13,6 +13,15 @@ namespace PizzaBackend
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("pizzafrontend",
+                    policy => policy.WithOrigins("http://localhost:5173") // Vite frontend URL-je
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
+
+            
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -29,6 +38,7 @@ namespace PizzaBackend
             });
 
             var app = builder.Build();
+            app.UseCors("pizzafrontend");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
