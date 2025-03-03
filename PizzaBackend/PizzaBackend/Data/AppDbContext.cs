@@ -17,6 +17,8 @@ namespace PizzaBackend.Data
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
 
 
@@ -32,6 +34,7 @@ namespace PizzaBackend.Data
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)
                 .HasConversion<string>(); // Enum -> string konverzió az SQLite adatbázisban
+            modelBuilder.Entity<User>().HasIndex(u => u.UserEmail).IsUnique();
         }
 
     }
