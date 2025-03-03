@@ -46,40 +46,95 @@ namespace PizzaBackend.Controllers
 
         // POST: api/orders
         [HttpPost]
-        public async Task<ActionResult<OrderDto>> PostOrder(CreateOrderDto createOrderDto)
+        public async Task<ActionResult<OrderDto>> CreateOrder(CreateOrderDto createOrderDto)
         {
             var user = await _context.Users.FindAsync(createOrderDto.UserId);
-            if (user == null) return BadRequest(new { message = "User not found" });
+            if (user == null)
+            {
+                return BadRequest(new { message = "A felhasználó nem található az adatbázisban!" });
+            }
 
             var order = new Order
             {
                 UserId = createOrderDto.UserId,
                 Status = OrderStatus.Pending,
+                TotalPrice = 0,
+                OrderCreatedAt = DateTime.UtcNow,
                 CartItems = new List<Cart>()
             };
 
-            foreach (var cartDto in createOrderDto.CartItems)
+            foreach (var cartItemDto in createOrderDto.CartItems)
             {
-                var pizza = await _context.Pizzas.FindAsync(cartDto.PizzaId);
-                if (pizza == null) return BadRequest(new { message = $"Pizza with ID {cartDto.PizzaId} not found" });
-
-                order.CartItems.Add(new Cart
+                var pizza = await _context.Pizzas.FindAsync(cartItemDto.PizzaId);
+                if (pizza == null)
                 {
-                    Order = order,
-                    Pizza = pizza,
-                    PizzaId = cartDto.PizzaId,
-                    Quantity = cartDto.Quantity,
-                    UnitPrice = pizza.PizzaPrice
-                });
-            }
+                    return BadRequest(new { message = $"A pizza ID {cartItemDto.PizzaId} nem található az adatbázisban!" });
+                }
 
-            order.TotalPrice = (int)order.CartItems.Sum(c => c.Quantity * c.UnitPrice);
+                var cartItem = new Cart
+                {
+                    UserId = createOrderDto.UserId,
+                    PizzaId = cartItemDto.PizzaId,
+                    Quantity = cartItemDto.Quantity,
+                    UnitPrice = pizza.PizzaPrice
+                };
+
+                order.CartItems.Add(cartItem);
+                order.TotalPrice += cartItem.Quantity * cartItem.UnitPrice;
+            }
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order.ToDto());
         }
+
+        // POST: Kosár véglegesítése, rendelés leadása (Checkout)
+        [HttpPost("checkout")]
+        public async Task<ActionResult<OrderDto>> Checkout([FromQuery] int userId)
+        {
+            var cartItems = await _context.Carts
+                .Where(c => c.UserId == userId)
+                .Include(c => c.Pizza)
+                .ToListAsync();
+
+            if (!cartItems.Any())
+            {
+                return BadRequest(new { message = "A kosár üres, nem lehet leadni a rendelést!" });
+            }
+
+            var order = new Order
+            {
+                UserId = userId,
+                Status = OrderStatus.Pending,
+                TotalPrice = cartItems.Sum(c => c.Quantity * c.UnitPrice),
+                OrderCreatedAt = DateTime.UtcNow,
+                CartItems = new List<Cart>()
+            };
+
+            foreach (var cartItem in cartItems)
+            {
+                order.CartItems.Add(new Cart
+                {
+                    UserId = cartItem.UserId,
+                    PizzaId = cartItem.PizzaId,
+                    Quantity = cartItem.Quantity,
+                    UnitPrice = cartItem.UnitPrice
+                });
+            }
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            _context.Carts.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "A rendelés sikeresen leadva!", orderId = order.Id });
+        }
+
+
+
+
 
         // PUT: api/orders/5 (rendelés státuszának módosítása)
         [HttpPut("{id}")]
