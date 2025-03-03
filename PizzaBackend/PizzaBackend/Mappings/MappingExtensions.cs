@@ -1,19 +1,20 @@
 ﻿using PizzaBackend.DTOs;
 using PizzaBackend.Models;
-using System.Linq;
 
 namespace PizzaBackend.Extensions
 {
     public static class MappingExtensions
-    {
-        public static CartItemDto ToDto(this Cart cart)
+    {   
+
+        public static UserDto ToDto(this User user)
         {
-            return new CartItemDto
+            return new UserDto
             {
-                PizzaId = cart.PizzaId,
-                PizzaName = cart.Pizza?.PizzaName ?? "Unknown Pizza",
-                Quantity = cart.Quantity,
-                UnitPrice = cart.UnitPrice
+                Id = user.Id,
+                UserName = user.UserName,
+                UserEmail = user.UserEmail,
+                Address = user.Address,
+                Role = (int)user.Role
             };
         }
 
@@ -29,6 +30,18 @@ namespace PizzaBackend.Extensions
             };
         }
 
+         public static CartDto ToDto(this Cart cart)
+        {
+            return new CartDto
+            {
+                Id = cart.Id,
+                UserId = cart.UserId,
+                PizzaId = cart.PizzaId,
+                Quantity = cart.Quantity,
+                Pizza = cart.Pizza?.ToDto()
+            };
+        }
+
         public static OrderDto ToDto(this Order order)
         {
             return new OrderDto
@@ -38,20 +51,18 @@ namespace PizzaBackend.Extensions
                 Status = order.Status.ToString(),
                 TotalPrice = order.TotalPrice,
                 OrderCreatedAt = order.OrderCreatedAt,
-                CartItems = order.CartItems.Select(c => c.ToDto()).ToList()
+                CartItems = order.CartItems.Select(c => new CartItemDto
+                {
+                    PizzaId = c.PizzaId,
+                    PizzaName = c.Pizza?.PizzaName ?? "Ismeretlen",
+                    Quantity = c.Quantity,
+                    UnitPrice = c.UnitPrice
+                }).ToList()
             };
         }
 
-        public static UserDto ToDto(this User user)
-        {
-            return new UserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                UserEmail = user.UserEmail,
-                Address = user.Address,
-                Role = (int)user.Role
-            };
-        }
+
+        
+
     }
 }

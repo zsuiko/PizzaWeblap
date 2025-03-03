@@ -2,11 +2,16 @@ const API_URL = import.meta.env.VITE_API_URL;
  
 // Pizzák lekérése
 export async function getPizzas() {
-  const response = await fetch(`${API_URL}/pizzas`);
-  if (!response.ok) {
-    throw new Error("Hiba történt a pizzák lekérdezésekor");
+  try {
+      const response = await fetch(`${API_URL}/pizzas`);
+      if (!response.ok) {
+          throw new Error("Nem sikerült lekérni a pizzákat.");
+      }
+      return await response.json();
+  } catch (error) {
+      console.error("Hiba a pizzák lekérésekor:", error);
+      return [];
   }
-  return await response.json();
 }
  
 // Új pizza hozzáadása
@@ -24,4 +29,14 @@ export async function createPizza(pizzaData) {
   }
  
   return await response.json();
+}
+
+export async function deletePizza(pizzaId) {
+  const response = await fetch(`${API_URL}/pizzas/${pizzaId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Hiba történt a pizza törlésekor");
+  }
 }
