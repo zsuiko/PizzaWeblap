@@ -39,6 +39,11 @@ namespace PizzaBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<CartDto>> AddToCart(CreateCartDto createCartDto)
         {
+            if (createCartDto.UserId == 0 || createCartDto.PizzaId == 0)
+            {
+                return BadRequest(new { message = "Hiányzó felhasználó- vagy pizzaazonosító!" });
+            }
+
             var user = await _context.Users.FindAsync(createCartDto.UserId);
             if (user == null)
             {
@@ -65,7 +70,7 @@ namespace PizzaBackend.Controllers
                     UserId = createCartDto.UserId,
                     PizzaId = createCartDto.PizzaId,
                     Quantity = createCartDto.Quantity,
-                    UnitPrice = pizza.PizzaPrice // 🔥 Most már biztosan a pizza árával mentjük!
+                    UnitPrice = pizza.PizzaPrice
                 };
 
                 _context.Carts.Add(newCartItem);

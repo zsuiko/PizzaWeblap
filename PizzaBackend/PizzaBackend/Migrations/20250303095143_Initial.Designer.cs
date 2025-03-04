@@ -11,7 +11,7 @@ using PizzaBackend.Data;
 namespace PizzaBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250226153248_Initial")]
+    [Migration("20250303095143_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace PizzaBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PizzaId")
@@ -35,14 +35,19 @@ namespace PizzaBackend.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("UnitPrice")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("PizzaId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
@@ -96,8 +101,8 @@ namespace PizzaBackend.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("PizzaPrice")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PizzaPrice")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -148,11 +153,9 @@ namespace PizzaBackend.Migrations
 
             modelBuilder.Entity("PizzaBackend.Models.Cart", b =>
                 {
-                    b.HasOne("PizzaBackend.Models.Order", "Order")
+                    b.HasOne("PizzaBackend.Models.Order", null)
                         .WithMany("CartItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("PizzaBackend.Models.Pizza", "Pizza")
                         .WithMany()
@@ -160,9 +163,15 @@ namespace PizzaBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.HasOne("PizzaBackend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Pizza");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.Order", b =>

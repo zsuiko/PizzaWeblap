@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaBackend.Data;
 using PizzaBackend.DTOs;
@@ -45,6 +46,7 @@ namespace PizzaBackend.Controllers
         }
 
         // POST: api/orders
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<OrderDto>> CreateOrder(CreateOrderDto createOrderDto)
         {

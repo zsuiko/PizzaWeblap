@@ -19,7 +19,7 @@ namespace PizzaBackend.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PizzaName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     PizzaDescription = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    PizzaPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    PizzaPrice = table.Column<int>(type: "INTEGER", nullable: false),
                     PizzaImgUrl = table.Column<string>(type: "TEXT", nullable: false),
                     PizzaCreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -75,10 +75,11 @@ namespace PizzaBackend.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    OrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     PizzaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "TEXT", nullable: false)
+                    UnitPrice = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -87,12 +88,17 @@ namespace PizzaBackend.Migrations
                         name: "FK_Carts_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Carts_Pizzas_PizzaId",
                         column: x => x.PizzaId,
                         principalTable: "Pizzas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Carts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -106,6 +112,11 @@ namespace PizzaBackend.Migrations
                 name: "IX_Carts_PizzaId",
                 table: "Carts",
                 column: "PizzaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
