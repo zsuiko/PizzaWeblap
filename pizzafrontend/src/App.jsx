@@ -1,49 +1,50 @@
-import { useContext } from "react";
-import Orders from "./components/Orders";
-import CreateOrder from "./components/CreateOrder";
-import CreatePizza from "./components/CreatePizza";
-import Pizzas from "./components/Pizzas";
-import Cart from "./components/Cart";
-import PizzaList from "./components/PizzaList";
-import { AuthProvider } from "./context/AuthProvider"; // ✅ Named import
-import { AuthContext } from "./context/AuthContext"; // ✅ Named import
-import Login from "./components/Login";
-import Register from "./components/Register";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Register from "./pages/Register";
+import NotFound from "./pages/NotFound";
 
-function App() {
+export default function App() {
   return (
-    <AuthProvider> {/* ✅ Az egész alkalmazás itt legyen becsomagolva */}
-      <MainApp />
-    </AuthProvider>
-  );
-}
-
-function MainApp() {
-  const { user } = useContext(AuthContext); // ✅ Most már biztosan elérhető lesz
-
-  return (
-    <div>
-      <h1>Slice & Spice</h1>
+    <Router>
       <Navbar />
 
-      {!user ? (
-        <div>
-          <Register />
-          <Login />
-        </div>
-      ) : (
-        <div>
-          <CreateOrder />
-          <Orders />
-          <CreatePizza />
-          <Pizzas />
-          <PizzaList />
-          <Cart />
-        </div>
-      )}
-    </div>
+      <div>
+        {/* Alap szakaszok (pl. Home, About) */}
+        <section
+          id="home"
+          style={{
+            height: "100vh",
+            backgroundColor: "#f0f0f0",
+            marginTop: "60px", // A navbar magasságának figyelembevétele
+          }}
+        >
+          <h1>Home</h1>
+        </section>
+
+        <section id="about" style={{ height: "100vh", backgroundColor: "#e0e0e0" }}>
+          <h1>About</h1>
+          <p>about us</p>
+        </section>
+
+        <section id="ingridients" style={{ height: "100vh", backgroundColor: "#d0d0d0" }}>
+          <h1>Amiből készül</h1>
+        </section>
+
+        <section id="connection" style={{ height: "100vh", backgroundColor: "#c0c0c0" }}>
+          <h1>Kapcsolat</h1>
+        </section>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/ingridients" element={<Ingridients />} />
+          <Route path="/connection" element={<Connection />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
-export default App;
