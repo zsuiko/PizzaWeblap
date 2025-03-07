@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext"; // ✅ Context importálá
 import { getCart, removeFromCart, checkout } from "../api/cart";
 
 function Cart() {
-    const { user } = useContext(AuthContext); // ✅ Innen kapjuk az `userId`-t
+    const { user } = useContext(AuthContext); 
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

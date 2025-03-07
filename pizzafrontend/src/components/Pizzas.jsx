@@ -26,7 +26,7 @@ function Pizzas() {
 
     try {
       await deletePizza(pizzaId);
-      setPizzas(pizzas.filter((pizza) => pizza.id !== pizzaId)); // Frissítjük a listát
+      setPizzas(pizzas.filter((pizza) => pizza.id !== pizzaId));
     } catch (err) {
       setError(`Hiba történt: ${err.message}`);
     }
