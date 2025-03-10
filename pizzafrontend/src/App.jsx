@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -12,34 +12,29 @@ import Login from "./pages/Login";
 import PlaceOrder from "./pages/PlaceOrder";
 import Orders from "./pages/Orders";
 
-
 const App = () => {
   return (
-    <div>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/connection" element={<Connection />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/product/:productId" element={<Product />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/place-order" element={<PlaceOrder />} />
-        <Route path="/orders" element={<Orders />} />
-      </Routes>
-    </div>
-  )
-
-
-
-
-
+    <AuthContext> {/* Az AuthContext köré csomagolás biztosítja, hogy az alkalmazásban minden komponens hozzáférhessen a hitelesítési információkhoz */}
+      <Router> {/* Az egész alkalmazást csomagoljuk be Router komponenssel */}
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/connection" element={<Connection />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/product/:productId" element={<Product />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/place-order" element={<PlaceOrder />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </AuthContext>
+  );
 }
 
 export default App;
-
-
 
 
 

@@ -7,7 +7,7 @@ import navbarlogo from "../assets/navbarlogo.png";
 
 function Navbar() {
   return (
-    <div>
+    <div className="flex items-center justify-between py-5 bg-gray-800 text-white">
       <img src={navbarlogo} alt="" /> 
 
     </div>
