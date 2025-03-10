@@ -1,3 +1,15 @@
+@import "tailwindcss";
+
+
+
+
+
 html {
     scroll-behavior: smooth;
+}
+
+
+
+a.active hr{
+    display: block;
 }

@@ -1,25 +1,77 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import navbarlogo from "../assets/navbarlogo.png";
-
-
-
-
+import { NavLink, Link } from "react-router-dom";
+import original from "../assets/original.png";
+import shopping_bag from "../assets/shopping-bag.png";
+import user from "../assets/user.png";
+//import { assets } from "../assets/assets";
+// absolute -top-3 -right-2 bg-red-500 w-5 h-5 rounded-full flex justify-center items-center text-xs text-white hidden dropdown-menu group-hover:block
 function Navbar() {
   return (
-    <div className="flex items-center justify-between py-5 bg-gray-800 text-white">
-      <img src={navbarlogo} alt="" /> 
+    <div className="flex items-center justify-between py-0.5 px-4 bg-gray-800 text-white">
+      <img src={original} className="w-36" alt="" />
+
+      <ul className="hidden sm:flex gap-4 text-sm text-white">
+        <NavLink to="/" className="flex flex-col items-center gap-1">
+          <p>Home</p> 
+          <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
+        </NavLink>
+
+        <NavLink to="/CartPage" className="flex flex-col items-center gap-1">
+          <p>Kosár</p> 
+          <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
+        </NavLink>
+
+
+        <NavLink to="/About" className="flex flex-col items-center gap-1">
+          <p>Rólunk</p> 
+          <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
+        </NavLink>
+
+        <NavLink to="/Connection" className="flex flex-col items-center gap-1">
+          <p>Kapcsolat</p> 
+          <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
+        </NavLink>
+
+        <NavLink to="/Product" className="flex flex-col items-center gap-1">
+          <p>Pizzáink</p> 
+          <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
+        </NavLink>
+
+        <NavLink to="/Login" className="flex flex-col items-center gap-1">
+          <p>Fiók</p> 
+          <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
+        </NavLink>
+
+
+      </ul>
+
+
+      <div className="flex items-center gap-6">
+        <img src={shopping_bag} className="w-5 cursor-pointer" alt="" />
+        <div className="group relative">
+          <img src={user} className="w-5 cursor-pointer" alt="" />
+            <div className="group-hover:block absolute hidden dropdown-menu right-0 pt-4">
+              <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-white text-gray-500 rounded"> 
+                <p className="cursor-pointer hover:text-black">My Profile</p>
+                <p className="cursor-pointer hover:text-black">Orders</p>
+                <p className="cursor-pointer hover:text-black">Logout</p>
+
+                </div>
+              </div>
+        </div>
+        <Link to='/' className="relative">
+          <img src={shopping_bag} className="w-5 min-w-5" alt="" />
+          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">10</p>
+        </Link>
+
+
+
+      </div>
 
     </div>
-  )
-
-};
-
+  );
+}
 
 export default Navbar;
-
-
-
 
 
 
