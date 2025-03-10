@@ -1,13 +1,23 @@
+import {  useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import original from "../assets/original.png";
 import shopping_bag from "../assets/shopping-bag.png";
 import user from "../assets/user.png";
+import menu_icon from "../assets/menu_icon.png";
+import dropdonw_menu_icon from "../assets/dropdown_menu_icon.png";
 //import { assets } from "../assets/assets";
 // absolute -top-3 -right-2 bg-red-500 w-5 h-5 rounded-full flex justify-center items-center text-xs text-white hidden dropdown-menu group-hover:block
 function Navbar() {
+
+
+    const [visible,setVisible] = useState(false);
+
+
+
+
   return (
     <div className="flex items-center justify-between py-0.5 px-4 bg-gray-800 text-white">
-      <img src={original} className="w-36" alt="" />
+      <Link to="/"><img src={original} className="w-36" alt="" /></Link> 
 
       <ul className="hidden sm:flex gap-4 text-sm text-white">
         <NavLink to="/" className="flex flex-col items-center gap-1">
@@ -15,7 +25,7 @@ function Navbar() {
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
-        <NavLink to="/CartPage" className="flex flex-col items-center gap-1">
+        <NavLink to="/Cart" className="flex flex-col items-center gap-1">
           <p>Kosár</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
@@ -46,7 +56,6 @@ function Navbar() {
 
 
       <div className="flex items-center gap-6">
-        <img src={shopping_bag} className="w-5 cursor-pointer" alt="" />
         <div className="group relative">
           <img src={user} className="w-5 cursor-pointer" alt="" />
             <div className="group-hover:block absolute hidden dropdown-menu right-0 pt-4">
@@ -62,10 +71,34 @@ function Navbar() {
           <img src={shopping_bag} className="w-5 min-w-5" alt="" />
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">10</p>
         </Link>
-
-
-
+        <img onClick={()=>setVisible(true)} src={ menu_icon}  className="w-5 cursor-pointer sm:hidden" alt=""  />
       </div>
+
+      
+      <div className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? 'w-full' : 'w-0' }`}>
+          <div className="flex flex-col text-gray-600">
+              <div onClick={()=>setVisible(false)} className="flex items-center gap-4 p-3 cursor-pointer">
+                  <img src={dropdonw_menu_icon} className="h-4 rotate-90" alt="" />
+                  <p>Back</p>
+              </div>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"  to='/'>Home</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"to='/Cart'>Kosár</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/About'>Rólunk</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/Connection'>Kapcsolat</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/Product'>Pizzáink</NavLink>
+
+
+
+
+
+
+          </div>
+        
+      </div>
+
+
+
+
 
     </div>
   );
