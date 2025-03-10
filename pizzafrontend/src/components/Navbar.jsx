@@ -1,6 +1,34 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import navbarlogo from "../assets/navbarlogo.png";
 
+
+
+
+function Navbar() {
+  return (
+    <div>
+      <img src={navbarlogo} alt="" /> 
+
+    </div>
+  )
+
+};
+
+
+export default Navbar;
+
+
+
+
+
+
+
+
+
+
+
+/*
 export default function Navbar() {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
@@ -47,7 +75,6 @@ export default function Navbar() {
         <button onClick={() => setShowLoginModal(true)} style={styles.button}>🔑 Login</button>
       </nav>
 
-      {/* Bejelentkezés Modal */}
       {showLoginModal && (
         <div style={styles.modalOverlay} onClick={() => setShowLoginModal(false)}>
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -126,3 +153,4 @@ const styles = {
     borderRadius: "5px",
   }
 };
+*/
