@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -16,7 +16,6 @@ const App = () => {
   return (
     
     <AuthContext>
-      <Router>
       <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -30,7 +29,6 @@ const App = () => {
           <Route path="/orders" element={<Orders />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
     </AuthContext>
   );
 }
