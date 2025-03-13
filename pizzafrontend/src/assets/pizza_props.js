@@ -1,4 +1,7 @@
 import Hawai from "./hawi.png";
+import Star from "./star.png";
+
+
 
 export const products = [
   {

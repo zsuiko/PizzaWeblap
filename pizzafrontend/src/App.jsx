@@ -23,7 +23,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/connection" element={<Connection />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/pizza" element={<Product />} />
         <Route path="/pizza/:productId" element={<Pizza />} /> {/* Új útvonal a pizza részletekhez */}
         <Route path="/login" element={<Login />} />
         <Route path="/place-order" element={<PlaceOrder />} />

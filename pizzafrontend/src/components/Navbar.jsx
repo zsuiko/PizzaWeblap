@@ -41,7 +41,7 @@ function Navbar() {
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
-        <NavLink to="/product" className="flex flex-col items-center gap-1">
+        <NavLink to="/pizza" className="flex flex-col items-center gap-1">
           <p>Pizzáink</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
@@ -85,7 +85,7 @@ function Navbar() {
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"to='/cart'>Kosár</NavLink>
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/about'>Rólunk</NavLink>
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/connection'>Kapcsolat</NavLink>
-              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/product'>Pizzáink</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/pizza'>Pizzáink</NavLink>
 
 
 

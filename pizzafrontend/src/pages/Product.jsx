@@ -57,10 +57,10 @@ function Product() {
       <div className="flex-1">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
           {filterProducts.map((item, index) => (
-            <Link to={`/product/${item.id}`} key={index}>
+            <Link to={`/pizza/${item.id}`} key={index}>
               <ProductItem 
                 name={item.name} 
-                id={item.id} 
+                id={item._id} 
                 price={item.price} 
                 image={item.image} 
               />
