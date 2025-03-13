@@ -11,7 +11,7 @@ function ProductItem({id, image, name , price}) {
 
     return (
         
-        <Link to={`/product/${id}`} className="text-gray-700 cursor-pointer">
+        <Link to={`/pizza/${id}`} className="text-gray-700 cursor-pointer">
             <div className="overflow-hidden">
                 <img className="hover:scale-110 transition ease-in-out" src={image[0]} alt="" />
             </div>
