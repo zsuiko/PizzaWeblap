@@ -1,20 +1,22 @@
 import { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
+import ProductItem from "./ProductItem"; // Make sure ProductItem is imported
+
 
 const Latest = () => {
+    const { products } = useContext(ShopContext); // Get products from context
 
+    console.log(products); // Check what products contain
 
-const { products } = useContext(ShopContext);
-
-
-console.log(products);
-
-return (
-    <div>
-
-    </div>
-)
+    return (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 grap-6">
+            {
+                products.map((item, index) => (
+                    <ProductItem key={index} id={item._id} image={item.image} name={item.name} price={item.price} />
+                ))
+            }
+        </div>
+    );
 }
-
 
 export default Latest;

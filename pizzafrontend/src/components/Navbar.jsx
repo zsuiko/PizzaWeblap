@@ -25,28 +25,28 @@ function Navbar() {
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
-        <NavLink to="/Cart" className="flex flex-col items-center gap-1">
+        <NavLink to="/cart" className="flex flex-col items-center gap-1">
           <p>Kosár</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
 
-        <NavLink to="/About" className="flex flex-col items-center gap-1">
+        <NavLink to="/about" className="flex flex-col items-center gap-1">
           <p>Rólunk</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
-        <NavLink to="/Connection" className="flex flex-col items-center gap-1">
+        <NavLink to="/connection" className="flex flex-col items-center gap-1">
           <p>Kapcsolat</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
-        <NavLink to="/Product" className="flex flex-col items-center gap-1">
+        <NavLink to="/product" className="flex flex-col items-center gap-1">
           <p>Pizzáink</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
-        <NavLink to="/Login" className="flex flex-col items-center gap-1">
+        <NavLink to="/login" className="flex flex-col items-center gap-1">
           <p>Fiók</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
@@ -82,10 +82,10 @@ function Navbar() {
                   <p>Back</p>
               </div>
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"  to='/'>Home</NavLink>
-              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"to='/Cart'>Kosár</NavLink>
-              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/About'>Rólunk</NavLink>
-              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/Connection'>Kapcsolat</NavLink>
-              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/Product'>Pizzáink</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"to='/cart'>Kosár</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/about'>Rólunk</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/connection'>Kapcsolat</NavLink>
+              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/product'>Pizzáink</NavLink>
 
 
 
