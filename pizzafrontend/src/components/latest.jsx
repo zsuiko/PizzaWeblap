@@ -4,9 +4,7 @@ import ProductItem from "./ProductItem"; // Make sure ProductItem is imported
 
 
 const Latest = () => {
-    const { products } = useContext(ShopContext); // Get products from context
-
-    console.log(products); // Check what products contain
+    const { products } = useContext(ShopContext); 
 
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 grap-6">

@@ -26,12 +26,6 @@ function Navbar() {
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
         </NavLink>
 
-        <NavLink to="/cart" className="flex flex-col items-center gap-1">
-          <p>Kosár</p> 
-          <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
-        </NavLink>
-
-
         <NavLink to="/about" className="flex flex-col items-center gap-1">
           <p>Rólunk</p> 
           <hr className="w-2/4 border-none h-[1.5px] bg-white hidden" />
@@ -68,7 +62,7 @@ function Navbar() {
                 </div>
               </div>
         </div>
-        <Link to='/' className="relative">
+        <Link to='/cart' className="relative">
           <img src={shopping_bag} className="w-5 min-w-5" alt="" />
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">{getCartCount()}</p>
         </Link>
@@ -83,7 +77,6 @@ function Navbar() {
                   <p>Back</p>
               </div>
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"  to='/'>Home</NavLink>
-              <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none"to='/cart'>Kosár</NavLink>
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/about'>Rólunk</NavLink>
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/connection'>Kapcsolat</NavLink>
               <NavLink onClick={()=>setVisible(false)} className="py-2 pl-6 border-none" to='/pizza'>Pizzáink</NavLink>

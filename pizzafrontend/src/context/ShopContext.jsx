@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { products } from "../assets/pizza_props";
 import PropTypes from 'prop-types';
-//import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const ShopContext = createContext();
@@ -13,16 +13,23 @@ const ShopContextProvider = (props) => {
 
     const addToCart = async (itemId, size) => {
 
+
+
         if(!size){
-            onclick=alert('Please select a size!');
+            toast.error('Kérlek válassz egy méretet!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
             return;
-        }
+        }  
 
-
-    /*    if(!size){
-            toast.error('Please select a size!');
-            return;
-        }*/   
+     
 
 
 
@@ -60,6 +67,17 @@ const ShopContextProvider = (props) => {
         return totalCount;
     }
 
+    const updateQuantity = async (itemId, size, quantity) => {
+
+        // Fix: Change CartItems to cartItems
+        let cartData = structuredClone(cartItems);  // This was incorrect
+    
+        // Update the quantity in the cart
+        cartData[itemId][size] = quantity;
+    
+        setCartItems(cartData);
+    }
+
 
     const value = {
         products,
@@ -68,6 +86,8 @@ const ShopContextProvider = (props) => {
         cartItems,
         addToCart,
         getCartCount,
+        getCartCount,
+        updateQuantity
 
     };
 
