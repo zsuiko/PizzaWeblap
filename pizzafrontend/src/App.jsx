@@ -12,10 +12,13 @@ import Pizza from "./pages/Pizza";
 import Login from "./pages/Login";
 import PlaceOrder from "./pages/PlaceOrder";
 import Orders from "./pages/Orders";
+//import { ToastContainer, toast } from "react-toastify";
+//import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
     <AuthContext>
+     {/* <ToastContainer />*/}
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

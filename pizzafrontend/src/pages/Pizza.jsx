@@ -5,7 +5,7 @@ import Star from "../assets/star.png";
 
 const Pizza = () => {
   const { productId } = useParams(); // Az URL-ből kiolvassuk a productId-t
-  const { products, currency } = useContext(ShopContext); // A currency-t és a products-ot a contextből olvassuk ki
+  const { products, currency, addToCart } = useContext(ShopContext); // A currency-t és a products-ot a contextből olvassuk ki
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState('');
   const [size, setSize] = useState(""); // Méret állapot inicializálása
@@ -60,8 +60,18 @@ const Pizza = () => {
             ))}
           </div>
         </div>
-        <button className="bg-black text-white px-8 py-3 text-sm active:bg-gray-600">ADD TO CART</button>
+        <button onClick={()=>addToCart(productData._id, size)} className="bg-black text-white px-8 py-3 text-sm active:bg-gray-600">ADD TO CART</button>
         <hr className="mt-8 sm:w-auto"/>
+        <div className="mt-20">
+          <div className="flex">
+            <b className="border px-5 py-3 text-sm">Leírás</b>
+            <p className="border px-5 py-3 text-sm">Vélemények</p>
+          </div>
+          <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
+            <p>bla bla bla</p>
+            <p>asdasdasdadsads</p>
+          </div>
+        </div>
       </div>
     </div>
   );

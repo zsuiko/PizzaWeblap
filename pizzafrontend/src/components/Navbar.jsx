@@ -1,10 +1,11 @@
-import {  useState } from "react";
+import React, {  useState, useContext} from "react";
 import { NavLink, Link } from "react-router-dom";
 import original from "../assets/original.png";
 import shopping_bag from "../assets/shopping-bag.png";
 import user from "../assets/user.png";
 import menu_icon from "../assets/menu_icon.png";
 import dropdonw_menu_icon from "../assets/dropdown_menu_icon.png";
+import { ShopContext } from "../context/ShopContext";
 //import { assets } from "../assets/assets";
 // absolute -top-3 -right-2 bg-red-500 w-5 h-5 rounded-full flex justify-center items-center text-xs text-white hidden dropdown-menu group-hover:block
 function Navbar() {
@@ -12,7 +13,7 @@ function Navbar() {
 
     const [visible,setVisible] = useState(false);
 
-
+    const{getCartCount} = useContext(ShopContext);
 
 
   return (
@@ -69,7 +70,7 @@ function Navbar() {
         </div>
         <Link to='/' className="relative">
           <img src={shopping_bag} className="w-5 min-w-5" alt="" />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">10</p>
+          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">{getCartCount()}</p>
         </Link>
         <img onClick={()=>setVisible(true)} src={ menu_icon}  className="w-5 cursor-pointer sm:hidden" alt=""  />
       </div>
