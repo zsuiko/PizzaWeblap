@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Bin_icon from "../assets/bin.png";
+import CartTotal from "../components/CartTotal";
 
 function Cart() {
     const { cartItems, products, currency, updateQuantity } = useContext(ShopContext);
@@ -60,6 +61,13 @@ function Cart() {
                         </div>
                     );
                 })}
+            </div>
+
+            <div className="felx justify-end my-20">
+                <div className="w-full sm:w-[450px] border-t pt-4">
+                    <CartTotal />
+                </div>
+
             </div>
         </div>
     );

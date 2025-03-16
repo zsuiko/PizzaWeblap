@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 import { products } from "../assets/pizza_props";
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
@@ -60,23 +60,43 @@ const ShopContextProvider = (props) => {
                         totalCount += cartItems[items][item];
                     }
                 } catch (error) {
-                    
+                    error;
                 }
             }
         }
         return totalCount;
     }
 
-    const updateQuantity = async (itemId, size, quantity) => {
 
-        // Fix: Change CartItems to cartItems
-        let cartData = structuredClone(cartItems);  // This was incorrect
-    
-        // Update the quantity in the cart
+   
+
+
+    const updateQuantity = (itemId, size, quantity) => { 
+        let cartData = structuredClone(cartItems); 
         cartData[itemId][size] = quantity;
-    
         setCartItems(cartData);
-    }
+    };
+    
+
+    const getCartAmount = () => { 
+        let totalAmount = 0;
+        for(const items in cartItems){
+            let itemInfo = products.find((product)=> product._id === items);
+            if (!itemInfo) continue; // Ha nincs ilyen termék, ugorjuk át
+            for(const item in cartItems[items]){
+                try {
+                    if(cartItems[items][item] > 0){
+                        totalAmount += itemInfo.price * cartItems[items][item]; // `ar` a pizza ár
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+        return totalAmount;
+    };
+    
+
 
 
     const value = {
@@ -86,8 +106,8 @@ const ShopContextProvider = (props) => {
         cartItems,
         addToCart,
         getCartCount,
-        getCartCount,
-        updateQuantity
+        updateQuantity,
+        getCartAmount,
 
     };
 
