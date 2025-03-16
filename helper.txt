@@ -5,3 +5,7 @@ npm i react-toastify
 
 npm install 
 npm run dev
+
+
+
+https://youtu.be/7E6um7NGmeE
