@@ -9,7 +9,7 @@ export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
     const currency = "HUF";
-    const deliveryCost = 1000;
+    const deliveryCost = 20000;
     const [cartItems, setCartItems] = useState({});
     const navigate = useNavigate();
 
@@ -72,11 +72,11 @@ const ShopContextProvider = (props) => {
         let totalAmount = 0;
         for(const items in cartItems){
             let itemInfo = products.find((product)=> product._id === items);
-            if (!itemInfo) continue; // Ha nincs ilyen termék, ugorjuk át
+            if (!itemInfo) continue;
             for(const item in cartItems[items]){
                 try {
                     if(cartItems[items][item] > 0){
-                        totalAmount += itemInfo.price * cartItems[items][item]; // `ar` a pizza ár
+                        totalAmount += itemInfo.price * cartItems[items][item];
                     }
                 } catch (error) {
                     console.error(error);
