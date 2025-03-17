@@ -4,7 +4,7 @@ import Bin_icon from "../assets/bin.png";
 import CartTotal from "../components/CartTotal";
 
 function Cart() {
-    const { cartItems, products, currency, updateQuantity } = useContext(ShopContext);
+    const { cartItems, products, currency, updateQuantity, navigate } = useContext(ShopContext);
     const [cartData, setCartData] = useState([]);
 
     useEffect(() => {
@@ -46,7 +46,7 @@ function Cart() {
                             <div>
                                 <p className="text-xs sm:text-lg font-medium">{productData.name}</p>
                                 <div className="flex items-center gap-5 mt-2">
-                                    <p>{currency}{productData.price}</p>
+                                    <p>{productData.price}{currency}</p>
                                     <p className="px-2 sm:px-3 sm:py-1 border bg-slate-50">{item.size}</p>
                                 </div>
                             </div>
@@ -66,6 +66,9 @@ function Cart() {
             <div className="felx justify-end my-20">
                 <div className="w-full sm:w-[450px] border-t pt-4">
                     <CartTotal />
+                </div>
+                <div className="w-full text-end">
+                    <button onClick={()=>navigate('/place-order')} className="bg-black text-white text-sm my-8 px-8 py-3">Fizetés</button>
                 </div>
 
             </div>

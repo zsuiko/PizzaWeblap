@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import { products } from "../assets/pizza_props";
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom"; // Correct import
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const ShopContext = createContext();
@@ -10,10 +11,9 @@ const ShopContextProvider = (props) => {
     const currency = "HUF";
     const deliveryCost = 1000;
     const [cartItems, setCartItems] = useState({});
+    const navigate = useNavigate();
 
     const addToCart = async (itemId, size) => {
-
-
 
         if(!size){
             toast.error('Kérlek válassz egy méretet!', {
@@ -28,10 +28,6 @@ const ShopContextProvider = (props) => {
             });
             return;
         }  
-
-     
-
-
 
         let cartData = structuredClone(cartItems);
 
@@ -50,7 +46,6 @@ const ShopContextProvider = (props) => {
         setCartItems(cartData);
     }
 
-
     const getCartCount = () => {
         let totalCount = 0;
         for(const items in cartItems){
@@ -67,16 +62,11 @@ const ShopContextProvider = (props) => {
         return totalCount;
     }
 
-
-   
-
-
     const updateQuantity = (itemId, size, quantity) => { 
         let cartData = structuredClone(cartItems); 
         cartData[itemId][size] = quantity;
         setCartItems(cartData);
     };
-    
 
     const getCartAmount = () => { 
         let totalAmount = 0;
@@ -95,9 +85,6 @@ const ShopContextProvider = (props) => {
         }
         return totalAmount;
     };
-    
-
-
 
     const value = {
         products,
@@ -108,7 +95,7 @@ const ShopContextProvider = (props) => {
         getCartCount,
         updateQuantity,
         getCartAmount,
-
+        navigate,
     };
 
     return (

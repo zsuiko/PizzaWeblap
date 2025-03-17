@@ -3,7 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 
 const CartTotal = () => {
 
-    const {currency,delivery_fee,getCartAmount} = useContext(ShopContext);
+    const {currency,deliveryCost,getCartAmount} = useContext(ShopContext);
 
     return (
         <div className='w-full'>
@@ -13,17 +13,17 @@ const CartTotal = () => {
            <div className='flex flex-col gap-2 mt-2 text-sm'>
                 <div className='flex justify-between'>
                     <p>subtotal</p>
-                    <p>{currency} {getCartAmount()}</p>
+                    <p>{getCartAmount()} {currency} </p>
                 </div>
                 <hr />
                 <div className='flex justify-between'>
                     <p>szállítás</p>
-                    <p>{currency} {delivery_fee}</p>
+                    <p>{deliveryCost} {currency}</p>
                 </div>
                 <hr />
                 <div className='flex justify-between'>
                     <b>összesen</b>
-                    <b>{currency} {getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee}</b>
+                    <b> {getCartAmount() === 0 ? 0 : getCartAmount() + deliveryCost} {currency}</b>
 
                 </div>
 
