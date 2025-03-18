@@ -1,4 +1,4 @@
-import React, {  useState, useContext} from "react";
+import {  useState, useContext} from "react";
 import { NavLink, Link } from "react-router-dom";
 import original from "../assets/original.png";
 import shopping_bag from "../assets/shopping-bag.png";
