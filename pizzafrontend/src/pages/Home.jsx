@@ -1,7 +1,8 @@
 import HotDeal from "../components/HotDeal"
 import Latest from "../components/latest"
 //import About from "../pages/About"
-import Ad from "../pages/Ad"
+import PizzaAd from "./PizzaAd"
+import ColaAd from "./ColaAd"
 import Contact from "../pages/Connection"
 
 
@@ -10,7 +11,8 @@ function Home() {
       <div>
           <HotDeal/>
           <Latest/>
-          <Ad/>
+          <ColaAd/>
+          <PizzaAd/>
           <Contact/>
 
       </div>
