@@ -1,55 +1,96 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Hawai from "../assets/hawi.png";
+import Coke from "../assets/cocacola.png";
+import bin from "../assets/bin.png";
+import cash from "../assets/cash.png";
 
 function PizzaAd() {
-  const items = [1, 2, 3, 4,5,6,7,8]; // Array to represent the button items for the Ferris wheel
+  const [rotateDeg, setRotateDeg] = useState(20); // Az aktuális forgatás szögének állapota
+  const [selectedText, setSelectedText] = useState(""); // Kiválasztott szöveg állapota
+
+  // Minden egyes körhöz egy kép és szöveg
+  const items = [
+    { id: 1, image: Hawai, text: "friss, ropogós, nagyszerű íz" }, // Kép 1
+    { id: 2, image: Coke, text: "kenyér, banán, alma" },  // Kép 2
+    { id: 3, image: cash, text: "bence, zsombor, bertold" }, // Kép 3
+    { id: 4, image: bin, text: "Szemetes" },  // Kép 4
+    { id: 5, image: Hawai, text: "finom pizza" }, // Kép 5
+    { id: 6, image: Coke, text: "friss üdítő" },  // Kép 6
+    { id: 7, image: Hawai, text: "friss és ízletes" }, // Kép 7
+    { id: 8, image: Coke, text: "üdítő ital" },  // Kép 8
+  ];
+
+  // Gombnyomáshoz rendelünk egy-egy szöveget
+  const handleButtonClick = (index) => {
+    // Gombnyomásra új szöget állítunk be a forgatáshoz
+    setRotateDeg((prevRotate) => prevRotate + 45);
+
+    // Beállítjuk a szöveget, amely a gombhoz tartozik
+    setSelectedText(items[index].text); // A gombhoz tartozó szöveg jelenik meg
+  };
 
   return (
     <div className="h-screen relative overflow-hidden">
       <div className="flex-1 bg-amber-500 flex items-center justify-center relative h-full">
-        {/* Large white circle (background for Ferris wheel) */}
+        {/* Nagy fehér kör (Ferris kerék háttér) */}
         <div className="w-250 h-250 bg-white rounded-full absolute bottom-0 right-0 translate-x-1/2 translate-y-1/3"></div>
 
-        {/* Spinning Ferris wheel container (1000px radius) */}
+        {/* Forgó Ferris kerék tartó (1000px sugár) */}
         <motion.div
-          animate={{ rotate: 360 }} // Continuous rotation
+          animate={{ rotate: rotateDeg }} // Az állapotot figyeljük, hogy folyamatosan frissüljön
           transition={{
-            duration: 20, // Duration for one full rotation
-            repeat: Infinity,
-            ease: "linear", // Smooth constant speed
+            duration: 1, // Forgás időtartama
+            ease: "easeInOut", // Zökkenőmentes forgás
           }}
           className="absolute flex items-center justify-center w-[1000px] h-[1000px] rounded-full bottom-0 right-0 translate-x-1/2 translate-y-1/3"
         >
-          {/* Map through the items to create the "cabins" */}
+          {/* Térjünk végig az elemeket, hogy létrehozzuk a "kabint" */}
           {items.map((item, index) => {
-            // Calculate angle and position for each dot
-            const angle = (360 / items.length) * index; // Angle between the dots
-           // const radius = 1000 / 2; // Radius for positioning the dots (half the size of the rotating circle)
-            const x = Math.cos((angle * Math.PI) / 180) * 1000; // X position (calculated from angle)
-            const y = Math.sin((angle * Math.PI) / 180) * 1000; // Y position (calculated from angle)
+            // Számoljuk ki az egyes pontok szögét és pozícióját
+            const angle = (360 / items.length) * index; // A pontok közötti szög  
+            const x = Math.cos((angle * Math.PI) / 180) * 1000; // X pozíció (szögtől függően)
+            const y = Math.sin((angle * Math.PI) / 180) * 1000; // Y pozíció (szögtől függően)
 
             return (
               <motion.div
-                key={item}
+                key={item.id}
                 className="absolute flex items-center justify-center bg-red-500 w-50 h-50 rounded-full"
                 style={{
                   left: "50%",
                   top: "50%",
-                  transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`, // Position each button around the rotating circle
+                  transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
                 }}
-              />
+              >
+                {/* Kép elhelyezése a piros körökben */}
+                <motion.img
+                  src={item.image}  // A képet a "item.image"-ből használjuk
+                  alt={`item-${item.id}`}
+                  className="w-full h-full object-cover rounded-full"
+                />
+              </motion.div>
             );
           })}
         </motion.div>
-        <div className="flex flex-col mr-[90%] bottom-10">
-          <button className="p-2 m-2 border-2 rounded-2xl">1</button>
-          <button className="p-2 m-2 border-2 rounded-2xl">2</button>
-          <button className="p-2 m-2 border-2 rounded-2xl">3</button>
-          <button className="p-2 m-2 border-2 rounded-2xl">4</button>
-          <button className="p-2 m-2 border-2 rounded-2xl">5</button>
-          <button className="p-2 m-2 border-2 rounded-2xl">6</button>
+
+        {/* Kijelölt szöveg */}
+        <div className="absolute bottom-10 right-10 text-black font-bold text-lg">
+          {selectedText ? selectedText : "Válassz egy gombot a szöveg megjelenítéséhez"}
         </div>
 
+        {/* Gombok a forgatás vezérlésére */}
+        <div className="flex flex-col mr-[90%] bottom-10">
+          {items.map((item, index) => (
+
+            <button
+              key={index}
+              className="p-2 m-2 border-2 rounded-2xl"
+              onClick={() => handleButtonClick(index)} // Gombnyomáskor az adott item indexe
+            >
+              {item.image}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
