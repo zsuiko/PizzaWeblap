@@ -4,12 +4,14 @@ import Hawai from "../assets/hawi.png";
 import Coke from "../assets/cocacola.png";
 import bin from "../assets/bin.png";
 import cash from "../assets/cash.png";
+import { Link } from "react-router-dom";
 
 function PizzaAd() {
-  const [rotateDeg, setRotateDeg] = useState(20); // Az aktuális forgatás szögének állapota
-  const [selectedText, setSelectedText] = useState(""); // Kiválasztott szöveg állapota
+  const [rotateDeg, setRotateDeg] = useState(20); 
+  const [selectedText, setSelectedText] = useState(""); 
+  const [selectedImage, setSelectedImage] = useState(null); 
 
-  // Minden egyes körhöz egy kép és szöveg
+  
   const items = [
     { id: 1, image: Hawai, text: "friss, ropogós, nagyszerű íz" }, // Kép 1
     { id: 2, image: Coke, text: "kenyér, banán, alma" },  // Kép 2
@@ -28,6 +30,7 @@ function PizzaAd() {
 
     // Beállítjuk a szöveget, amely a gombhoz tartozik
     setSelectedText(items[index].text); // A gombhoz tartozó szöveg jelenik meg
+    setSelectedImage(items[index].image); // A kiválasztott képet tároljuk
   };
 
   return (
@@ -66,7 +69,7 @@ function PizzaAd() {
                 <motion.img
                   src={item.image}  // A képet a "item.image"-ből használjuk
                   alt={`item-${item.id}`}
-                  className="w-full h-full object-cover rounded-full"
+                  className={`w-full h-full object-cover rounded-full ${selectedImage === item.image ? 'border-4 border-blue-500' : ''}`}
                 />
               </motion.div>
             );
@@ -81,14 +84,13 @@ function PizzaAd() {
         {/* Gombok a forgatás vezérlésére */}
         <div className="flex flex-col mr-[90%] bottom-10">
           {items.map((item, index) => (
-
-            <button
+            <Link
               key={index}
               className="p-2 m-2 border-2 rounded-2xl"
               onClick={() => handleButtonClick(index)} // Gombnyomáskor az adott item indexe
             >
-              {item.image}
-            </button>
+              <img src={item.image} alt="" className="w-10 h-10 object-cover" />
+            </Link>
           ))}
         </div>
       </div>
