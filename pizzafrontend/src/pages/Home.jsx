@@ -8,32 +8,6 @@ import Contact from "../pages/Connection";
 function Home() {
   // Állapot a lekért adatok tárolására
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // API hívás
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("/api/pizza"); // Itt a backend API URL-je
-        if (!response.ok) {
-          throw new Error("Hiba történt a lekérés során");
-        }
-        const data = await response.json();
-        setProducts(data);  // A válaszban lévő adatokat tároljuk
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []); // A useEffect csak egyszer fut le, amikor a komponens betöltődik
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
   return (
     <div>
       <HotDeal />
