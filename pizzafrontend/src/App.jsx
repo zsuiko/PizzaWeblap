@@ -27,7 +27,7 @@ export default function App() {
         <Route path="/connection" element={<Connection />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/pizza" element={<Product />} />
-        <Route path="/pizza/:productId" element={<Pizza />} /> {/* Új útvonal a pizza részletekhez */}
+        <Route path="/pizza/:id" element={<Pizza />} />
         <Route path="/login" element={<Login />} />
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/orders" element={<Orders />} />
