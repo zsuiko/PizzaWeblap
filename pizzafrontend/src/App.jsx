@@ -1,38 +1,25 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
-import Connection from "./pages/Connection";
-import Cart from "./pages/Cart";
-import { AuthContext } from "./context/AuthContext";
-import Product from "./pages/Product";
-import Pizza from "./pages/Pizza"; 
-import Login from "./pages/Login";
-import PlaceOrder from "./pages/PlaceOrder";
-import Orders from "./pages/Orders";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// App.jsx
+import { Routes, Route } from 'react-router-dom';
+import Layout from './layouts/MainLayout';
+import Home from './pages/Home';
+import Shop from './pages/Shop';
+import Cart from './pages/Cart';
+import Products from './pages/Products';
+import ProductDetails from './pages/ProductDetails';
+import NotFound from './pages/NotFound';
 
-export default function App() {
+function App() {
   return (
-    <AuthContext>
-     <ToastContainer />
-      <Navbar />
-      <Routes>
+    <Routes>
+      <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/connection" element={<Connection />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/pizza" element={<Product />} />
-        <Route path="/pizza/:id" element={<Pizza />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/place-order" element={<PlaceOrder />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AuthContext>
+        <Route path="/Products" element={<Products/>} />
+        <Route path="/Products/:productType/:productId" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart/>} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
+
+export default App;

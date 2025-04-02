@@ -1,112 +1,53 @@
-import { createContext, useState } from "react";
-import { products } from "../assets/pizza_props";
-import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom"; // Correct import
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const ShopContext = createContext();
+const ShopContext = createContext();
 
-const ShopContextProvider = (props) => {
-    const currency = "HUF";
-    const deliveryCost = 20000;
-    const [cartItems, setCartItems] = useState({});
-    const navigate = useNavigate();
+export const ShopProvider = ({ children }) => {
+  const [pizzas, setPizzas] = useState([]);
+  const [drinks, setDrinks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    const addToCart = async (itemId, size) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [pizzasResponse, drinksResponse] = await Promise.all([
+          fetch('http://localhost:5278/api/Pizza'),
+          fetch('http://localhost:5278/api/Drink'),
+        ]);
 
-        if(!size){
-            toast.error('Kérlek válassz egy méretet!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            });
-            return;
-        }  
-
-        let cartData = structuredClone(cartItems);
-
-        if (cartData[itemId]) {
-            if (cartData[itemId][size]) {
-                cartData[itemId][size] += 1;
-            } 
-            else {
-                cartData[itemId][size] = 1;
-            }
-        } 
-        else{
-            cartData[itemId] = {};
-            cartData[itemId][size] = 1;
+        if (!pizzasResponse.ok || !drinksResponse.ok) {
+          throw new Error('Hiba történt az adatok lekérésekor');
         }
-        setCartItems(cartData);
-    }
 
-    const getCartCount = () => {
-        let totalCount = 0;
-        for(const items in cartItems){
-            for(const item in cartItems[items]){
-                try {
-                    if(cartItems[items][item] > 0){
-                        totalCount += cartItems[items][item];
-                    }
-                } catch (error) {
-                    error;
-                }
-            }
-        }
-        return totalCount;
-    }
+        const [pizzasData, drinksData] = await Promise.all([
+          pizzasResponse.json(),
+          drinksResponse.json(),
+        ]);
 
-    const updateQuantity = (itemId, size, quantity) => { 
-        let cartData = structuredClone(cartItems); 
-        cartData[itemId][size] = quantity;
-        setCartItems(cartData);
+        setPizzas(pizzasData);
+        setDrinks(drinksData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const getCartAmount = () => { 
-        let totalAmount = 0;
-        for(const items in cartItems){
-            let itemInfo = products.find((product)=> product._id === items);
-            if (!itemInfo) continue;
-            for(const item in cartItems[items]){
-                try {
-                    if(cartItems[items][item] > 0){
-                        totalAmount += itemInfo.price * cartItems[items][item];
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        }
-        return totalAmount;
-    };
+    fetchData();
+  }, []);
 
-    const value = {
-        products,
-        currency,
-        deliveryCost,
-        cartItems,
-        addToCart,
-        getCartCount,
-        updateQuantity,
-        getCartAmount,
-        navigate,
-    };
-
-    return (
-        <ShopContext.Provider value={value}>
-            {props.children}
-        </ShopContext.Provider>
-    );
+  return (
+    <ShopContext.Provider value={{ pizzas, drinks, loading, error }}>
+      {children}
+    </ShopContext.Provider>
+  );
 };
 
-ShopContextProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+export const useShop = () => {
+  const context = useContext(ShopContext);
+  if (context === undefined) {
+    throw new Error('A useShop hookot a ShopProvider-en belül kell használni');
+  }
+  return context;
 };
-
-export default ShopContextProvider;

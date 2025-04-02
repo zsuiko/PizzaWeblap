@@ -78,18 +78,19 @@ namespace PizzaBackend
     });
             });
 
-         /*
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
+                options.AddPolicy("AllowFrontend",
                     policy =>
                     {
-                        policy.AllowAnyOrigin() 
+                        policy.WithOrigins("http://localhost:5173") // Vite alapértelmezett szervere
                               .AllowAnyMethod()
                               .AllowAnyHeader();
                     });
             });
-*/   
+
+
             var jwtKey = builder.Configuration["Jwt:Key"];
             var jwtIssuer = builder.Configuration["Jwt:Issuer"];
             var jwtAudience = builder.Configuration["Jwt:Audience"];
@@ -144,12 +145,12 @@ namespace PizzaBackend
             ;
 
             app.UseHttpsRedirection();
-            app.UseDefaultFiles(); 
-            app.UseStaticFiles(); 
+        //    app.UseDefaultFiles(); 
+        //    app.UseStaticFiles(); 
 
 
 
-            app.UseCors("AllowAll");
+            app.UseCors("AllowFrontend");
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -157,7 +158,7 @@ namespace PizzaBackend
            
             app.MapControllers();
 
-            app.MapFallbackToFile("/index.html");
+          //  app.MapFallbackToFile("/index.html");
 
 
             app.Run();

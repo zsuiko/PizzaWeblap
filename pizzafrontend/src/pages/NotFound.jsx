@@ -1,4 +1,8 @@
-export default function NotFound() {
-    return <h1>NotFound Page</h1>;
-  }
-  
+const NotFound = () => {
+    return (
+        <div>Ez az oldal nem létezik</div>
+    );
+}
+
+
+export default NotFound;

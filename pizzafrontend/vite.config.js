@@ -8,8 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://localhost:7059', // A backend URL-je
-        changeOrigin: true, // A proxy átirányítja az origin-t a backend URL-jére
+        target: 'http://localhost:5278', 
+        changeOrigin: true, 
         secure: false, // Ha nem HTTPS-t használsz a backend-en, állítsd false-ra
       },
     },
