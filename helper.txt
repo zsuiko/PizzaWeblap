@@ -6,6 +6,13 @@ npm i react-toastify
 npm install framer-motion
 
 
+npm install react-rater
+
+npm i hamburger-react
+
+
+npm i @heroicons/react
+
 npm install 
 npm run dev
 

@@ -1,0 +1,94 @@
+/* products.css */
+
+/* Container for the product details page */
+.product-details {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  /* Product title */
+  .product-details h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Product image */
+  .product-details img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  /* Product price and description */
+  .product-details p {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #555;
+  }
+  
+  /* Button styling for adding to cart */
+  .add-to-cart-btn {
+    background-color: #ff6f61;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-to-cart-btn:hover {
+    background-color: #ff4c42;
+  }
+  
+  /* Rating section */
+  .rating-container {
+    margin-top: 20px;
+  }
+  
+  .rating-container p {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .rating-container .rater {
+    margin-top: 10px;
+  }
+  
+  /* Reviews */
+  .reviews-section {
+    margin-top: 40px;
+  }
+  
+  .reviews-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .review-card {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .review-card p {
+    margin: 5px 0;
+  }
+  
+  .review-card .reviewer-name {
+    font-weight: bold;
+  }
+  
+  
