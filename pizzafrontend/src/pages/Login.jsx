@@ -1,38 +1,103 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx'; // Add the .jsx extension
-import { authService } from '../services/api';
 
-function Login() {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login, error, setError } = useAuth();
   const navigate = useNavigate();
-  const { login } = useAuth();
-
+  const location = useLocation();
+  const from = location.state?.from || '/';
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
+    setError(null);
+    
+    if (!email || !password) {
+      setError('Kérjük, adja meg az e-mail címét és jelszavát.');
+      return;
+    }
     
     try {
-      const data = await authService.login(email, password);
-      login(data);
-      navigate('/');
+      setIsSubmitting(true);
+      
+      console.log('Attempting login with:', { email });
+      
+      const response = await fetch('http://localhost:5278/api/account/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      // Log HTTP status
+      console.log('Login response status:', response.status);
+      
+      // Get the raw text first for debugging
+      const rawText = await response.text();
+      console.log('Raw response:', rawText);
+      
+      // Then parse it as JSON
+      let data;
+      try {
+        data = JSON.parse(rawText);
+        console.log('Login API response data:', data);
+      } catch (parseError) {
+        console.error('Failed to parse response as JSON:', parseError);
+        throw new Error('Server response was not valid JSON');
+      }
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Sikertelen bejelentkezés');
+      }
+      
+      // After logging in successfully, fetch the current user to get the ID
+      try {
+        const userResponse = await fetch('http://localhost:5278/api/users/me', {
+          headers: {
+            'Authorization': `Bearer ${data.token}`,
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          console.log('User API response data:', userData);
+          
+          // Combine the login response with user data
+          const combinedData = {
+            ...data,
+            ...userData,
+            // Ensure id is consistently available
+            id: userData.id || userData.Id || data.id || data.Id
+          };
+          
+          login(combinedData);
+        } else {
+          // If we can't get the user details, still log in with what we have
+          login(data);
+        }
+      } catch (userError) {
+        console.error('Error fetching user details:', userError);
+        // Fall back to just using the login data
+        login(data);
+      }
+      
+      navigate(from);
+      
     } catch (err) {
-      setError(
-        err.response?.data || 
-        err.message || 
-        'Sikertelen bejelentkezés. Ellenőrizze az e-mail címet és a jelszót.'
-      );
+      setError(err.message || 'Hiba történt a bejelentkezés során');
+      console.error('Login error:', err);
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-amber-500 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -81,10 +146,10 @@ function Login() {
           <div>
             <button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50"
             >
-              {loading ? 'Bejelentkezés...' : 'Bejelentkezés'}
+              {isSubmitting ? 'Bejelentkezés...' : 'Bejelentkezés'}
             </button>
           </div>
 
@@ -99,6 +164,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

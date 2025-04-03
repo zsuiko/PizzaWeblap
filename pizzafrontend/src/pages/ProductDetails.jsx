@@ -51,17 +51,30 @@ const ProductDetails = () => {
   const handleAddToCart = async () => {
     if (!user) {
       // Redirect to login if user is not authenticated
-      navigate('/login');
+      navigate('/login', { 
+        state: { from: `/products/${productType}/${productId}` }
+      });
       return;
     }
 
     try {
       setAddingToCart(true);
+      
+      // Debug information about the current user
+      console.log("Current user before adding to cart:", user);
+      console.log("User ID properties:", {
+        id: user.id,
+        Id: user.Id,
+        userId: user.userId,
+        UserId: user.UserId
+      });
+      
       await addToCart(product, quantity, productType);
       setAdded(true);
       setTimeout(() => setAdded(false), 3000); // Reset added state after 3 seconds
     } catch (err) {
       console.error("Hiba a kosárhoz adás során:", err);
+      alert(`Hiba történt: ${err.message}`);
     } finally {
       setAddingToCart(false);
     }

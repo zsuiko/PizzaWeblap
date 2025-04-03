@@ -26,18 +26,62 @@ export const AuthProvider = ({ children }) => {
     const tokenExpiration = localStorage.getItem('tokenExpiration');
     
     if (storedUser && storedToken && new Date(tokenExpiration) > new Date()) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        console.log('Loaded user from localStorage:', parsedUser);
+        setUser(parsedUser);
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
+        localStorage.removeItem('user');
+      }
     }
     
     setLoading(false);
   }, []);
 
   const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    // Ensure user data has an id field (use consistent property name)
+    const processedUserData = { ...userData };
+
+    // Debug the raw user data from backend
+    console.log('Raw user data from login:', userData);
+    
+    // We need to ensure the user has an 'id' property - check all possible formats
+    if (!processedUserData.id && !processedUserData.Id && !processedUserData.userId && !processedUserData.UserId) {
+      // If no ID property is present, use the ID from the JWT token claim
+      // This is a hack but ensures we have an ID if the API doesn't return one directly
+      try {
+        const tokenData = userData.token.split('.')[1];
+        const decodedToken = JSON.parse(atob(tokenData));
+        console.log('Decoded token:', decodedToken);
+        
+        // Try to find ID in standard JWT claim formats
+        processedUserData.id = decodedToken.sub || 
+                             decodedToken.nameid || 
+                             decodedToken.userId ||
+                             decodedToken.id;
+                             
+        console.log('Extracted ID from token:', processedUserData.id);
+      } catch (e) {
+        console.error('Failed to extract user ID from token:', e);
+      }
+    }
+    
+    // Normalize ID field to use 'id' as the standard property
+    processedUserData.id = processedUserData.id || 
+                           processedUserData.Id || 
+                           processedUserData.userId || 
+                           processedUserData.UserId || 
+                           'unknown-id';
+
+    console.log('Processed user data before storage:', processedUserData);
+    
+    setUser(processedUserData);
+    localStorage.setItem('user', JSON.stringify(processedUserData));
     localStorage.setItem('token', userData.token);
-    localStorage.setItem('refreshToken', userData.refreshToken);
-    localStorage.setItem('tokenExpiration', userData.tokenExpiration);
+    localStorage.setItem('refreshToken', userData.refreshToken || '');
+    localStorage.setItem('tokenExpiration', userData.tokenExpiration || new Date(Date.now() + 86400000).toISOString()); // Default 24h if not provided
+    
     setError(null);
   };
 
@@ -50,12 +94,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUser = (userData) => {
-    setUser(prev => ({ ...prev, ...userData }));
-    localStorage.setItem('user', JSON.stringify({ ...user, ...userData }));
+    const updatedUser = { ...user, ...userData };
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, login, logout, updateUser, setError }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      error, 
+      login, 
+      logout, 
+      updateUser, 
+      setError 
+    }}>
       {children}
     </AuthContext.Provider>
   );

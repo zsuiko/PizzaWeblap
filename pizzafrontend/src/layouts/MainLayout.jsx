@@ -2,6 +2,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { ShoppingBagIcon } from "@heroicons/react/24/outline"; // Updated import for Heroicons v2
 
 function MainLayout() {
   const { user, logout } = useAuth();
@@ -24,8 +25,7 @@ function MainLayout() {
           {/* Auth and cart links */}
           <div className="flex items-center space-x-4">
             <Link to="/cart" className="flex items-center hover:text-amber-200 transition">
-              <span className="material-icons mr-1">shopping_cart</span>
-              Kosár
+              <ShoppingBagIcon className="h-6 w-6 mr-1" />
             </Link>
             
             {/* Conditional rendering based on auth status */}
