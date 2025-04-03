@@ -99,6 +99,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
+  // Add isAuthenticated helper function
+  const isAuthenticated = () => {
+    return !!user;
+  };
+
   return (
     <AuthContext.Provider value={{ 
       user, 
@@ -107,7 +112,8 @@ export const AuthProvider = ({ children }) => {
       login, 
       logout, 
       updateUser, 
-      setError 
+      setError,
+      isAuthenticated 
     }}>
       {children}
     </AuthContext.Provider>

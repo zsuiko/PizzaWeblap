@@ -17,6 +17,7 @@ const Cart = () => {
       return;
     }
 
+    // Call openCart to use the optimized cart loading logic
     fetchCart();
   }, [user, navigate, fetchCart]);
 
@@ -27,22 +28,40 @@ const Cart = () => {
   const tax = Math.round(subtotal * taxRate);
   const total = subtotal + deliveryCost;
 
+  // Handle quantity changes with proper error handling
   const handleQuantityChange = async (itemId, currentQuantity, change) => {
-    const newQuantity = currentQuantity + change;
-    if (newQuantity < 1) {
-      await removeFromCart(itemId);
-    } else {
-      await updateCartItemQuantity(itemId, newQuantity);
+    try {
+      const newQuantity = currentQuantity + change;
+      if (newQuantity < 1) {
+        await removeFromCart(itemId);
+      } else {
+        await updateCartItemQuantity(itemId, newQuantity);
+      }
+    } catch (err) {
+      console.error("Failed to update quantity:", err);
+      // Optionally show an error message to the user
     }
   };
 
+  // Handle item removal with proper error handling
   const handleRemoveItem = async (itemId) => {
-    await removeFromCart(itemId);
+    try {
+      await removeFromCart(itemId);
+    } catch (err) {
+      console.error("Failed to remove item:", err);
+      // Optionally show an error message to the user
+    }
   };
 
+  // Handle cart clearing with proper error handling
   const handleClearCart = async () => {
     if (window.confirm('Biztosan kiüríti a kosarat?')) {
-      await clearCart();
+      try {
+        await clearCart();
+      } catch (err) {
+        console.error("Failed to clear cart:", err);
+        // Optionally show an error message to the user
+      }
     }
   };
 
