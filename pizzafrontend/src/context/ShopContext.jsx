@@ -186,35 +186,80 @@ export const ShopProvider = ({ children }) => {
       }
       
       const carts = await response.json();
+      console.log('All carts from API:', carts); // Debug log to see what's coming back
+      
       const userCart = carts.find(cart => cart.userId === user.id && cart.isActive);
       
       if (userCart) {
-        const formattedCart = {
-          cartId: userCart.cartId,
-          items: [
-            ...userCart.pizzaCartItems.map(item => ({
+        console.log('Found user cart:', userCart); // Debug the specific cart object
+        
+        // Safely process pizza items with null checks
+        const pizzaItems = userCart.pizzaCartItems
+          .filter(item => item && item.pizzaId) // Filter out any null items
+          .map(item => {
+            // Check if pizza exists
+            if (!item.pizza) {
+              console.warn(`Pizza with ID ${item.pizzaId} not found in cart item`, item);
+              return {
+                itemId: item.pizzaCartItemId,
+                productType: 'pizza',
+                productId: item.pizzaId,
+                name: `Unknown Pizza (ID: ${item.pizzaId})`,
+                price: item.price || 0,
+                quantity: item.quantity || 1,
+                imageUrl: '/placeholder.jpg'
+              };
+            }
+            
+            return {
               itemId: item.pizzaCartItemId,
               productType: 'pizza',
               productId: item.pizzaId,
-              name: item.pizza.name,
-              price: item.price,
-              quantity: item.quantity,
-              imageUrl: item.pizza.imageUrl
-            })),
-            ...userCart.drinkCartItems.map(item => ({
+              name: item.pizza?.name || `Pizza (ID: ${item.pizzaId})`,
+              price: item.price || 0,
+              quantity: item.quantity || 1,
+              imageUrl: item.pizza?.imageUrl || '/placeholder.jpg'
+            };
+          });
+        
+        // Safely process drink items with null checks
+        const drinkItems = userCart.drinkCartItems
+          .filter(item => item && item.drinkId) // Filter out any null items
+          .map(item => {
+            // Check if drink exists
+            if (!item.drink) {
+              console.warn(`Drink with ID ${item.drinkId} not found in cart item`, item);
+              return {
+                itemId: item.drinkCartItemId,
+                productType: 'drink',
+                productId: item.drinkId,
+                name: `Unknown Drink (ID: ${item.drinkId})`,
+                price: item.price || 0,
+                quantity: item.quantity || 1,
+                imageUrl: '/placeholder.jpg'
+              };
+            }
+            
+            return {
               itemId: item.drinkCartItemId,
               productType: 'drink',
               productId: item.drinkId,
-              name: item.drink.name,
-              price: item.price,
-              quantity: item.quantity,
-              imageUrl: item.drink.imageUrl
-            }))
-          ],
-          totalItems: userCart.pizzaCartItems.reduce((sum, item) => sum + item.quantity, 0) + 
-                      userCart.drinkCartItems.reduce((sum, item) => sum + item.quantity, 0),
-          totalPrice: userCart.pizzaCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) +
-                      userCart.drinkCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+              name: item.drink?.name || `Drink (ID: ${item.drinkId})`,
+              price: item.price || 0,
+              quantity: item.quantity || 1,
+              imageUrl: item.drink?.imageUrl || '/placeholder.jpg'
+            };
+          });
+        
+        const formattedCart = {
+          cartId: userCart.cartId,
+          items: [...pizzaItems, ...drinkItems],
+          totalItems: 
+            userCart.pizzaCartItems.reduce((sum, item) => sum + (item?.quantity || 0), 0) + 
+            userCart.drinkCartItems.reduce((sum, item) => sum + (item?.quantity || 0), 0),
+          totalPrice:
+            userCart.pizzaCartItems.reduce((sum, item) => sum + ((item?.price || 0) * (item?.quantity || 0)), 0) +
+            userCart.drinkCartItems.reduce((sum, item) => sum + ((item?.price || 0) * (item?.quantity || 0)), 0)
         };
         
         setCart(formattedCart);
