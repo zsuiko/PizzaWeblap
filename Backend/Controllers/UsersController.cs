@@ -24,7 +24,7 @@ namespace PizzaBackend.Controllers
         }
 
         [HttpGet("get-all-users")]
-        [Authorize]//(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
             var users = await _userManager.Users

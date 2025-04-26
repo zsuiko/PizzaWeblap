@@ -65,39 +65,7 @@ namespace PizzaBackend.Data
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Kezdő adatok
-            modelBuilder.Entity<Product>().HasData(
-                new Product
-                {
-                    Id = 1,
-                    Name = "Margherita",
-                    Description = "Klasszikus margherita pizza",
-                    ImageUrl = "https://example.com/margherita.jpg",
-                    Price = 2799,
-                    Category = ProductCategory.pizza,
-                    IsAvailable = true
-                },
-                new Product
-                {
-                    Id = 2,
-                    Name = "Pepperoni",
-                    Description = "Pepperoni pizza",
-                    ImageUrl = "https://example.com/pepperoni.jpg",
-                    Price = 3100,
-                    Category = ProductCategory.pizza,
-                    IsAvailable = true
-                },
-                new Product
-                {
-                    Id = 3,
-                    Name = "Cola",
-                    Description = "Üdítő ital",
-                    ImageUrl = "https://example.com/cola.jpg",
-                    Price = 699,
-                    Category = ProductCategory.drink,
-                    IsAvailable = true
-                }
-            );
+           
 
 
 
