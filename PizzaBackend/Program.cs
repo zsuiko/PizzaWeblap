@@ -45,7 +45,7 @@ namespace PizzaBackend
 
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            
             builder.Services.AddEndpointsApiExplorer();
 
 
@@ -76,6 +76,8 @@ namespace PizzaBackend
             new string[]{}
         }
     });
+
+                
             });
 
 
@@ -84,9 +86,11 @@ namespace PizzaBackend
                 options.AddPolicy("AllowFrontend",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173") // Vite alapértelmezett szervere
+                        policy.WithOrigins("http://localhost:3000") // Vite alapértelmezett szervere
                               .AllowAnyMethod()
-                              .AllowAnyHeader();
+                              .AllowAnyHeader()
+                              .AllowCredentials();
+                        
                     });
             });
 
@@ -115,6 +119,8 @@ namespace PizzaBackend
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero 
 
                 };
             });
@@ -122,6 +128,13 @@ namespace PizzaBackend
             builder.Services.AddAuthorization();
 
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            
+            
+            
+
 
 
 
@@ -135,14 +148,8 @@ namespace PizzaBackend
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pizzéria API V1");
-                c.InjectStylesheet("/css/swagger-custom.css");
-                    c.DocumentTitle = "Pizzéria API - Dark Mode";
-                });
-            }
-            ;
+                app.UseSwaggerUI();
+            };
 
             app.UseHttpsRedirection();
         //    app.UseDefaultFiles(); 

@@ -5,7 +5,6 @@ namespace PizzaBackend.DTOs.Account
 {
     public class RegisterDTO
     {
-        public string UserName { get; set; }    
         [Required]
         [EmailAddress]
         public string? Email { get; set; }

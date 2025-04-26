@@ -1,39 +1,18 @@
-@import "tailwindcss";
-
-html {
-    scroll-behavior: smooth;
-}
-
-
-a.active hr {
-    display: block;
-}
-
-
-@media (max-width: 640px) {
-    a.active {
-        background-color: black;
-        color: white;
-    }
-}
-
-
-::-webkit-scrollbar {
-    display: none;
-}
-
-
-img {
-    transition: transform 0.1s ease-out;
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --error-color: #f72585;
+    --text-color: #2b2d42;
+    --light-gray: #f8f9fa;
+    --medium-gray: #e9ecef;
+    --dark-gray: #adb5bd;
+    --white: #ffffff;
   }
   
-
-
-#LoginEmail:invalid{
-    border-color: red;
-}
-
-#LoginEmail:invalid{
-    border-color: red;
-}
-
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  

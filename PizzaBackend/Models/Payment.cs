@@ -6,7 +6,7 @@ namespace PizzaBackend.Models
     public class Payment
     {
         [Key]
-        public int PaymentId { get; set; }
+        public int Id { get; set; }
         public int OrderId { get; set; } // Kapcsolat a rendeléssel
         public decimal Amount { get; set; } // Fizetett összeg
         public DateTime PaymentDate { get; set; } = DateTime.Now; // Fizetés dátuma

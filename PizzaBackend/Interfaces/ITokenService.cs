@@ -6,7 +6,7 @@ namespace PizzaBackend.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(User user);
+        Task<string> CreateToken(User user);
         string CreateRefreshToken();
 
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);

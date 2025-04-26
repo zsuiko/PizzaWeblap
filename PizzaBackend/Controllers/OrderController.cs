@@ -1,175 +1,91 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PizzaBackend.Data;
 using PizzaBackend.DTOs.Order;
-using PizzaBackend.Mappings;
-using PizzaBackend.Models;
-using System;
-using System.Linq;
+using PizzaBackend.Interfaces;
+using PizzaBackend.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static PizzaBackend.Models.Order;
 
 namespace PizzaBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    [Authorize]
+    public class OrdersController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly IOrderService _orderService;
 
-        public OrderController(AppDbContext context, UserManager<User> userManager)
+        public OrdersController(IOrderService orderService)
         {
-            _context = context;
-            _userManager = userManager;
+            _orderService = orderService;
         }
-        
-        // GET: api/Order
-        [HttpGet]
-        public async Task<IActionResult> GetUserOrders()
+
+        [HttpGet("my-orders")]
+        public async Task<IActionResult> GetMyOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var orders = _context.Orders
-                .Where(o => o.UserId == userId)
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Pizza)
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Drink)
-                .Select(o => o.ToOrderDTO())
-                .ToListAsync();
-                
-
+            var orders = await _orderService.GetUserOrdersAsync(userId);
             return Ok(orders);
         }
 
-        // GET: api/Order/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
-
-            var order = await _context.Orders
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Pizza)
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Drink)
-                .Include(o => o.Payment)
-                .FirstOrDefaultAsync(o => o.OrderId == id);
+            var order = await _orderService.GetOrderByIdAsync(id, userId);
 
             if (order == null)
+            {
                 return NotFound();
+            }
 
-            
-            if (order.UserId != userId)
-                return Forbid();
-
-            return Ok(order.ToOrderDTO());
+            return Ok(order);
         }
 
-        // POST: api/Order
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequestDTO orderDTO)
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequestDTO orderDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null)
-                return Unauthorized();
-
-            // Aktív kosár lekérdezése
-            var cart = await _context.Carts
-                .Include(c => c.PizzaCartItems)
-                    .ThenInclude(pci => pci.Pizza)
-                .Include(c => c.DrinkCartItems)
-                    .ThenInclude(dci => dci.Drink)
-                .FirstOrDefaultAsync(c => c.UserId == userId && c.IsActive);
-
-            if (cart == null)
-                return BadRequest("No active cart found");
-
-            if (!cart.PizzaCartItems.Any() && !cart.DrinkCartItems.Any())
-                return BadRequest("Cart is empty");
-
-            // Szállítási cím összeállítása
-            string deliveryAddress = string.IsNullOrEmpty(orderDTO.DeliveryAddress) ?
-                $"{user.PostalCode}, {user.City}, {user.Address}" :
-                orderDTO.DeliveryAddress;
-
-            if (string.IsNullOrWhiteSpace(deliveryAddress))
-                return BadRequest("Delivery address is required");
-
-            // Rendelés létrehozása
-            var order = new Order
+            try
             {
-                UserId = userId,
-                OrderDate = DateTime.UtcNow,
-                Status = OrderStatus.Processing,
-                DeliveryAddress = deliveryAddress,
-                OrderItems = cart.PizzaCartItems.Select(pci => new OrderItem
-                {
-                    PizzaId = pci.PizzaId,
-                    Quantity = pci.Quantity,
-                    Price = pci.Price
-                }).Concat(cart.DrinkCartItems.Select(dci => new OrderItem
-                {
-                    DrinkId = dci.DrinkId,
-                    Quantity = dci.Quantity,
-                    Price = dci.Price
-                })).ToList(),
-                TotalAmount = cart.PizzaCartItems.Sum(pci => pci.Price * pci.Quantity) +
-                              cart.DrinkCartItems.Sum(dci => dci.Price * dci.Quantity)
-            };
-
-            _context.Orders.Add(order);
-            cart.IsActive = false;
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetOrderById), new { id = order.OrderId }, order.ToOrderDTO());
+                var order = await _orderService.CreateOrderAsync(orderDto, userId);
+                return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT: api/Order/{id}/status
+        [HttpPatch("{id}/status")]
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateOrderStatusDTO statusDTO)
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateOrderStatusDTO statusDto)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _orderService.UpdateOrderStatusAsync(id, statusDto);
+
             if (order == null)
-                return NotFound("Order not found");
-            
+            {
+                return NotFound();
+            }
 
-            // Ellenőrizzük, hogy az új állapot érvényes-e
-            if (!Enum.IsDefined(typeof(Order.OrderStatus), statusDTO.Status))
-                return BadRequest("Invalid status");
-            
-
-            // Állapot frissítése
-            order.Status = statusDTO.Status;
-            _context.Orders.Update(order);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(order);
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("history")]
-        public async Task<IActionResult> GetAllOrders()
+        [HttpGet("all-orders")]
+        public async Task<ActionResult<IEnumerable<AdminOrderDTO>>> GetAllOrders()
         {
-            var orders = await _context.Orders
-                .Include(o => o.User)
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Pizza)
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Drink)
-                .Include(o => o.Payment)
-                .OrderByDescending(o => o.OrderDate)
-                .Select(o => o.ToOrderDTO())
-                .ToListAsync();
-
+            var orders = await _orderService.GetAllOrdersAsync();
             return Ok(orders);
         }
     }

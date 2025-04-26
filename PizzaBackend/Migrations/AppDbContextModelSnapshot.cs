@@ -45,13 +45,13 @@ namespace PizzaBackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "343cc3a2-ce86-40a7-b590-dcde34293b6b",
+                            Id = "ac2ed7fa-97f7-4817-88bb-8e77f3d4e611",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "779c1e4f-fbed-4d09-a541-e0df3d460317",
+                            Id = "6f7b80cf-52c4-4bcd-becf-99fff804ad7c",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -161,9 +161,12 @@ namespace PizzaBackend.Migrations
 
             modelBuilder.Entity("PizzaBackend.Models.Cart", b =>
                 {
-                    b.Property<int>("CartId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
@@ -172,97 +175,43 @@ namespace PizzaBackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("CartId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("PizzaBackend.Models.Drink", b =>
+            modelBuilder.Entity("PizzaBackend.Models.CartItem", b =>
                 {
-                    b.Property<int>("DrinkId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Category")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("DrinkId");
-
-                    b.ToTable("Drinks");
-
-                    b.HasData(
-                        new
-                        {
-                            DrinkId = 1,
-                            Category = 0,
-                            Description = "Üdítő ital",
-                            ImageUrl = "https://example.com/cola.jpg",
-                            IsAvailable = true,
-                            Name = "Cola",
-                            Price = 699m
-                        },
-                        new
-                        {
-                            DrinkId = 2,
-                            Category = 1,
-                            Description = "Friss narancslé",
-                            ImageUrl = "https://example.com/orange.jpg",
-                            IsAvailable = true,
-                            Name = "Narancslé",
-                            Price = 599m
-                        });
-                });
-
-            modelBuilder.Entity("PizzaBackend.Models.DrinkCartItem", b =>
-                {
-                    b.Property<int>("DrinkCartItemId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CartId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DrinkId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("DrinkCartItemId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("DrinkId");
+                    b.HasIndex("ProductId");
 
-                    b.ToTable("DrinkCartItems");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.Order", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -282,7 +231,7 @@ namespace PizzaBackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -291,39 +240,34 @@ namespace PizzaBackend.Migrations
 
             modelBuilder.Entity("PizzaBackend.Models.OrderItem", b =>
                 {
-                    b.Property<int>("OrderItemId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("DrinkId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("PizzaId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("OrderItemId");
-
-                    b.HasIndex("DrinkId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("PizzaId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.Payment", b =>
                 {
-                    b.Property<int>("PaymentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -347,7 +291,7 @@ namespace PizzaBackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("PaymentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
@@ -355,14 +299,17 @@ namespace PizzaBackend.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("PizzaBackend.Models.Pizza", b =>
+            modelBuilder.Entity("PizzaBackend.Models.Product", b =>
                 {
-                    b.Property<int>("PizzaId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Category")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -382,63 +329,50 @@ namespace PizzaBackend.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Size")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("PizzaId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Pizzas");
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
-                            PizzaId = 1,
+                            Id = 1,
                             Category = 0,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Klasszikus margherita pizza",
                             ImageUrl = "https://example.com/margherita.jpg",
                             IsAvailable = true,
                             Name = "Margherita",
                             Price = 2799m,
-                            Size = 1
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            PizzaId = 2,
-                            Category = 2,
+                            Id = 2,
+                            Category = 0,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Pepperoni pizza",
                             ImageUrl = "https://example.com/pepperoni.jpg",
                             IsAvailable = true,
                             Name = "Pepperoni",
                             Price = 3100m,
-                            Size = 2
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Üdítő ital",
+                            ImageUrl = "https://example.com/cola.jpg",
+                            IsAvailable = true,
+                            Name = "Cola",
+                            Price = 699m,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("PizzaBackend.Models.PizzaCartItem", b =>
-                {
-                    b.Property<int>("PizzaCartItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PizzaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PizzaCartItemId");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("PizzaId");
-
-                    b.ToTable("PizzaCartItems");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.RefreshToken", b =>
@@ -619,23 +553,23 @@ namespace PizzaBackend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PizzaBackend.Models.DrinkCartItem", b =>
+            modelBuilder.Entity("PizzaBackend.Models.CartItem", b =>
                 {
                     b.HasOne("PizzaBackend.Models.Cart", "Cart")
-                        .WithMany("DrinkCartItems")
+                        .WithMany("Items")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PizzaBackend.Models.Drink", "Drink")
-                        .WithMany("DrinkCartItems")
-                        .HasForeignKey("DrinkId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("PizzaBackend.Models.Product", "Product")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cart");
 
-                    b.Navigation("Drink");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.Order", b =>
@@ -651,26 +585,21 @@ namespace PizzaBackend.Migrations
 
             modelBuilder.Entity("PizzaBackend.Models.OrderItem", b =>
                 {
-                    b.HasOne("PizzaBackend.Models.Drink", "Drink")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("DrinkId");
-
                     b.HasOne("PizzaBackend.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PizzaBackend.Models.Pizza", "Pizza")
+                    b.HasOne("PizzaBackend.Models.Product", "Product")
                         .WithMany("OrderItems")
-                        .HasForeignKey("PizzaId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Drink");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Order");
 
-                    b.Navigation("Pizza");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.Payment", b =>
@@ -682,25 +611,6 @@ namespace PizzaBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("PizzaBackend.Models.PizzaCartItem", b =>
-                {
-                    b.HasOne("PizzaBackend.Models.Cart", "Cart")
-                        .WithMany("PizzaCartItems")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PizzaBackend.Models.Pizza", "Pizza")
-                        .WithMany("PizzaCartItems")
-                        .HasForeignKey("PizzaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Pizza");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.RefreshToken", b =>
@@ -716,16 +626,7 @@ namespace PizzaBackend.Migrations
 
             modelBuilder.Entity("PizzaBackend.Models.Cart", b =>
                 {
-                    b.Navigation("DrinkCartItems");
-
-                    b.Navigation("PizzaCartItems");
-                });
-
-            modelBuilder.Entity("PizzaBackend.Models.Drink", b =>
-                {
-                    b.Navigation("DrinkCartItems");
-
-                    b.Navigation("OrderItems");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.Order", b =>
@@ -736,11 +637,11 @@ namespace PizzaBackend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PizzaBackend.Models.Pizza", b =>
+            modelBuilder.Entity("PizzaBackend.Models.Product", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("CartItems");
 
-                    b.Navigation("PizzaCartItems");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("PizzaBackend.Models.User", b =>

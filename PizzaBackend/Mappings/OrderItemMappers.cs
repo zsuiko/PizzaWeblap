@@ -1,29 +1,29 @@
 ﻿using PizzaBackend.DTOs.OrderItem;
+using PizzaBackend.DTOs.Product;
 using PizzaBackend.Models;
 
 namespace PizzaBackend.Mappings
 {
     public static class OrderItemMappers
     {
-        public static OrderItemDTO ToOrderItemDTO(this OrderItem orderItemModel)
+        public static OrderItemDTO MapToOrderItemDTO(this OrderItem orderItem)
         {
             return new OrderItemDTO
             {
-                OrderItemId = orderItemModel.OrderItemId,
-                PizzaId = orderItemModel.PizzaId,
-                DrinkId = orderItemModel.DrinkId,
-                Quantity = orderItemModel.Quantity,
-                Price = orderItemModel.Price,
+                Id = orderItem.Id,
+                ProductId = orderItem.ProductId,
+                Quantity = orderItem.Quantity,
+                Price = orderItem.Price,
+                Product = orderItem.Product?.ToProductDTO()
             };
         }
 
-        public static OrderItem ToOrderItemFromCreateDTO(this CreateOrderItemRequestDTO orderItemDTO)
+        public static OrderItem MapToOrderItem(this CreateOrderItemRequestDTO dto)
         {
             return new OrderItem
             {
-                PizzaId = orderItemDTO.PizzaId,
-                DrinkId = orderItemDTO.DrinkId,
-                Quantity = orderItemDTO.Quantity,
+                ProductId = dto.ProductId,
+                Quantity = dto.Quantity
             };
         }
     }

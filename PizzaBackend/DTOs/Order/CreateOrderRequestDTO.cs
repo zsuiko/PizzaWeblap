@@ -5,9 +5,8 @@ namespace PizzaBackend.DTOs.Order
 {
     public class CreateOrderRequestDTO
     {
-        public int CartId { get; set; }
-        public string UserId { get; set; }
         
         public string DeliveryAddress { get; set; }
+        public FrontendCartDTO Cart { get; set; }
     }
 }

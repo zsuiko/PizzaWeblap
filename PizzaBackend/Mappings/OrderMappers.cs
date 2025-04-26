@@ -1,4 +1,5 @@
-﻿using PizzaBackend.DTOs.Order;
+﻿// OrderMappers.cs
+using PizzaBackend.DTOs.Order;
 using PizzaBackend.DTOs.OrderItem;
 using PizzaBackend.Models;
 
@@ -6,69 +7,50 @@ namespace PizzaBackend.Mappings
 {
     public static class OrderMappers
     {
-        public static OrderDTO ToOrderDTO(this Order orderModel)
+        public static OrderDTO ToOrderDTO(this Order order)
         {
             return new OrderDTO
             {
-                OrderId = orderModel.OrderId,
-                UserId = orderModel.UserId,
-                OrderDate = orderModel.OrderDate,
-                TotalAmount = orderModel.TotalAmount,
-                DeliveryAddress = orderModel.DeliveryAddress,
-                Status = orderModel.Status,
-                OrderItems = orderModel.OrderItems.Select(oi => oi.ToOrderItemDTO()).ToList(),
+                Id = order.Id,
+                OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount,
+                Status = order.Status.ToString(),
+                DeliveryAddress = order.DeliveryAddress,
+                UserFullName = order.User?.FirstName + " " + order.User?.LastName,
+                OrderItems = order.OrderItems?
+                    .Select(oi => oi.ToOrderItemDTO())
+                    .ToList() ?? new List<OrderItemDTO>()
             };
         }
 
-        public static Order ToOrderFromCreateDTO(this CreateOrderRequestDTO orderDTO, Cart cart, User user)
+        public static OrderItemDTO ToOrderItemDTO(this OrderItem orderItem)
         {
-            // Összesítjük a pizzákat és italokat
-            var orderItems = cart.PizzaCartItems.Select(pci => new OrderItem
+            return new OrderItemDTO
             {
-                PizzaId = pci.PizzaId,
-                DrinkId = null,
-                Quantity = pci.Quantity,
-                Price = pci.Price,
-            }).ToList();
-
-            orderItems.AddRange(cart.DrinkCartItems.Select(dci => new OrderItem
-            {
-                DrinkId = dci.DrinkId,
-                PizzaId = null,
-                Quantity = dci.Quantity,
-                Price = dci.Price,
-            }));
-
-            // Szállítási cím kezelése
-            string deliveryAddress;
-
-            if (!string.IsNullOrEmpty(user.Address) && !string.IsNullOrEmpty(user.City) && !string.IsNullOrEmpty(user.PostalCode))
-            {
-                // Ha a felhasználónak van mentett címe, akkor azt használjuk
-                deliveryAddress = $"{user.PostalCode}, {user.City}, {user.Address}";
-            }
-            else if (!string.IsNullOrEmpty(orderDTO.DeliveryAddress))
-            {
-                // Ha a felhasználónak nincs mentett címe, de a frontend küldött címet, akkor azt használjuk
-                deliveryAddress = orderDTO.DeliveryAddress;
-            }
-            else
-            {
-                // Ha nincs cím megadva, akkor hibát dobunk
-                throw new InvalidOperationException("A felhasználónak nincs mentett címe, és nem adott meg címet a rendelés során.");
-            }
-
-            return new Order
-            {
-                UserId = orderDTO.UserId,
-                OrderItems = orderItems,
-                TotalAmount = cart.PizzaCartItems.Sum(pci => pci.Price * pci.Quantity) +
-                              cart.DrinkCartItems.Sum(dci => dci.Price * dci.Quantity),
-                DeliveryAddress = deliveryAddress
+                Id = orderItem.Id,
+                ProductId = orderItem.ProductId,
+                Product = orderItem.Product?.ToProductDTO(),
+                Quantity = orderItem.Quantity,
+                Price = orderItem.Price
             };
         }
 
-
-
+        public static AdminOrderDTO ToAdminOrderDTO(this Order order)
+        {
+            return new AdminOrderDTO
+            {
+                Id = order.Id,
+                OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount,
+                Status = order.Status.ToString(),
+                DeliveryAddress = order.DeliveryAddress,
+                FullUserName = order.User?.FirstName + " " + order.User?.LastName,
+                UserEmail = order.User?.Email,
+                UserId = order.UserId,
+                OrderItems = order.OrderItems?
+                    .Select(oi => oi.ToOrderItemDTO())
+                    .ToList() ?? new List<OrderItemDTO>()
+            };
+        }
     }
 }

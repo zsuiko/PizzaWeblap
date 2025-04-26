@@ -4,6 +4,6 @@ namespace PizzaBackend.DTOs.Order
 {
     public class UpdateOrderStatusDTO
     {
-        public OrderStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }

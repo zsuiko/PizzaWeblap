@@ -1,0 +1,261 @@
+/* Base Styles */
+.home-container {
+    min-height: 120vh; /* Increased from 100vh to make the page longer */
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .pizza-wheel-background {
+    flex: 1;
+    background-color: #f59e0b; /* Amber-500 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    min-height: 120vh; /* Increased from 100vh to make the container longer */
+    padding-bottom: 7rem; /* Added padding at the bottom for extra space */
+  }
+  
+  /* Loading and Error Screens */
+  .loading-screen,
+  .error-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .error-screen {
+    color: #ef4444; /* Red-500 */
+  }
+
+  /* Loading and error styles */
+  .loading-container,
+  .error-container,
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    text-align: center;
+  }
+
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-left-color: #c0392b;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .error-container button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .error-container button:hover {
+    background-color: #a93226;
+  }
+  
+  /* White Circle */
+  .white-circle {
+    width: 1000px;
+    height: 1000px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(50%, 33%);
+  }
+  
+  /* Pizza Wheel */
+  .pizza-wheel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    bottom: 0;
+    right: 0;
+    transform: translate(50%, 33%);
+  }
+  
+  .pizza-wheel-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+  }
+  
+  .pizza-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  /* Mobile Pizza Grid */
+  .mobile-pizza-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .mobile-pizza-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .mobile-pizza-item.selected {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .mobile-pizza-image {
+    width: 6rem;
+    height: 6rem;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .mobile-pizza-name {
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: white;
+  }
+  
+  /* Pizza Description Panel */
+  .pizza-description-panel {
+    color: black;
+    font-weight: bold;
+    font-size: 1.125rem;
+    padding: 1rem;
+    background-color: rgba(252, 187, 11, 0.7);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 10;
+    width: 400px;
+    max-width: 40%;
+  }
+  
+  .pizza-description-panel.mobile {
+    position: static;
+    margin-top: 1.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    width: calc(100% - 2rem);
+    max-width: none;
+  }
+  
+  .pizza-description-panel h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pizza-price {
+    margin-top: 0.5rem;
+    color: #b45309; /* Amber-700 */
+    font-weight: 600;
+  }
+  
+  /* Pizza Selection Buttons */
+  .pizza-selection-buttons {
+    position: absolute;
+    right: 0rem; /* Match right alignment with description panel */
+    bottom: 14rem; /* Initial position that works with most description panel sizes */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 15;
+    width: 400px; /* Match width with description panel */
+    max-width: 40%; /* Match max-width with description panel */
+    transform: translateY(-50%); /* Move up by half of the buttons' height for better alignment */
+    padding-bottom: 1.5rem; /* Add spacing between buttons and panel */
+  }
+  
+  .pizza-button {
+    padding: 0.5rem;
+    margin: 0.25rem;
+    background-color: transparent;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .pizza-button-image {
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  
+  .pizza-button-image.selected {
+    box-shadow: 0 0 0 2px white;
+    transform: scale(1.1);
+  }
+  
+  .pizza-button:hover .pizza-button-image:not(.selected) {
+    transform: scale(1.05);
+  }
+  
+  .pizza-button-name {
+    display: none; /* Hide the pizza names */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1500px) {
+    .white-circle,
+    .pizza-wheel {
+      display: none;
+    }
+    
+    /* Keep buttons visible on smaller screens */
+    .pizza-selection-buttons {
+      bottom: 18rem; /* Adjust for mobile layout */
+    }
+  }
