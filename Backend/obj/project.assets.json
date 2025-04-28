@@ -8590,11 +8590,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
+      "projectUniqueName": "C:\\Users\\plezerzsombor\\Documents\\GitHub\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
       "projectName": "PizzaBackend",
-      "projectPath": "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
+      "projectPath": "C:\\Users\\plezerzsombor\\Documents\\GitHub\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
       "packagesPath": "C:\\Users\\plezerzsombor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\obj\\",
+      "outputPath": "C:\\Users\\plezerzsombor\\Documents\\GitHub\\PizzaWeblap\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

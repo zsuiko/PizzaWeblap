@@ -7,21 +7,21 @@ namespace PizzaBackend.Models
     {
         [Key]
         public int Id { get; set; }
-        public int OrderId { get; set; } // Kapcsolat a rendeléssel
-        public decimal Amount { get; set; } // Fizetett összeg
-        public DateTime PaymentDate { get; set; } = DateTime.Now; // Fizetés dátuma
-        public PaymentStatus Status { get; set; } = PaymentStatus.Pending; // Fizetés állapota
-        public string PaymentMethod { get; set; } // Fizetési mód (pl. kártya, PayPal stb.)
-        public string TransactionId { get; set; } // Tranzakció azonosító
+        public int OrderId { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime PaymentDate { get; set; } = DateTime.Now;
+        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
+        public string PaymentMethod { get; set; }
+        public string TransactionId { get; set; }
 
-        public Order Order { get; set; } // Navigációs tulajdonság a rendeléshez
+        public Order Order { get; set; }
 
         public enum PaymentStatus
         {
-            Pending,    // Függőben
-            Completed,  // Sikeres
-            Failed,     // Sikertelen
-            Refunded    // Visszatérítve
+            Pending,   
+            Completed,  
+            Failed,     
+            Refunded    
         }
     }
 }

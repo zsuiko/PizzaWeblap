@@ -69,6 +69,7 @@ if exist node_modules (
     )
 )
 
+call npm install vite
 
 start chrome --ignore-certificate-errors --disable-web-security --user-data-dir="%TEMP%\chrome_dev"
 
