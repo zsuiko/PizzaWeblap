@@ -44,21 +44,21 @@ namespace PizzaBackend.Data
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Kosár kapcsolatok
+            
             modelBuilder.Entity<Cart>()
                 .HasMany(c => c.Items)
                 .WithOne(i => i.Cart)
                 .HasForeignKey(i => i.CartId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Termék kapcsolatok
+            
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.CartItems)
                 .WithOne(i => i.Product)
                 .HasForeignKey(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Rendelés kapcsolatok
+            
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrderItems)
                 .WithOne(oi => oi.Order)

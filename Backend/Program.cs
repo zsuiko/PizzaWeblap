@@ -25,9 +25,9 @@ namespace PizzaBackend
 
            
 
-            // Naplózás hozzáadása
-            builder.Logging.AddConsole(); // Konzolra naplózás
-            builder.Logging.AddDebug();   // Debug ablakba naplózás
+           
+            builder.Logging.AddConsole(); 
+            builder.Logging.AddDebug();   
 
             builder.Services.AddDbContext<AppDbContext>(options =>
               options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -86,7 +86,7 @@ namespace PizzaBackend
                 options.AddPolicy("AllowFrontend",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:3000") // Vite alapértelmezett szervere
+                        policy.WithOrigins("http://localhost:3000") 
                               .AllowAnyMethod()
                               .AllowAnyHeader()
                               .AllowCredentials();
@@ -144,7 +144,7 @@ namespace PizzaBackend
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -152,8 +152,7 @@ namespace PizzaBackend
             };
 
             app.UseHttpsRedirection();
-        //    app.UseDefaultFiles(); 
-        //    app.UseStaticFiles(); 
+        
 
 
 
@@ -165,7 +164,7 @@ namespace PizzaBackend
            
             app.MapControllers();
 
-          //  app.MapFallbackToFile("/index.html");
+         
 
 
             app.Run();

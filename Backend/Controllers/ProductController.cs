@@ -65,7 +65,7 @@ public class ProductsController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateProductAvailability(int id, [FromBody] ToggleAvailabilityDTO toggleDto)
     {
-        if (!ModelState.IsValid)  // <-- Ellenőrizzük a modell érvényességét
+        if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }

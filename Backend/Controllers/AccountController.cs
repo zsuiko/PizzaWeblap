@@ -55,7 +55,7 @@ namespace PizzaBackend.Controllers
             var oldTokens = _context.RefreshTokens.Where(x => x.UserId == user.Id);
             _context.RefreshTokens.RemoveRange(oldTokens);
 
-            // Itt volt a hiba: await hiányzott
+            
             var token = await _tokenService.CreateToken(user);
             var refreshToken = _tokenService.CreateRefreshToken();
 
@@ -101,7 +101,7 @@ namespace PizzaBackend.Controllers
             if (storedRefreshToken == null || storedRefreshToken.IsExpired || !storedRefreshToken.IsActive)
                 return BadRequest("Invalid Refresh Token!");
 
-            // Itt volt a hiba: await hiányzott
+            
             var newToken = await _tokenService.CreateToken(user);
             var newRefreshToken = _tokenService.CreateRefreshToken();
 

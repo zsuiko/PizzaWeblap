@@ -29,7 +29,7 @@ namespace PizzaBackend.Services
         public async Task<string> CreateToken(User user)
         {
             
-            // Claim-ek létrehozása
+            
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
@@ -43,7 +43,7 @@ namespace PizzaBackend.Services
 
             };
 
-            // Szerepkörök lekérése az Identity-ből
+
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles)
             {

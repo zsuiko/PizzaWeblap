@@ -59,7 +59,7 @@ namespace PizzaBackend.Services
             var user = await GetUserOrThrowAsync(userId);
             ValidateCart(orderDto.Cart);
 
-            // Explicitly declare the tuple variables to avoid type inference issues
+            
             var result = await CreateOrderItemsAsync(orderDto.Cart.Items);
             var orderItems = result.items;
             var totalAmount = result.total;

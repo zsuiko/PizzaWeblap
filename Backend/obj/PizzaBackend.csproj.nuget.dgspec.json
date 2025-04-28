@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\projekttttt\\PizzaWeblap\\Backend\\PizzaBackend.csproj": {}
+    "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\PizzaBackend.csproj": {}
   },
   "projects": {
-    "F:\\projekttttt\\PizzaWeblap\\Backend\\PizzaBackend.csproj": {
+    "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\PizzaBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\projekttttt\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
+        "projectUniqueName": "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
         "projectName": "PizzaBackend",
-        "projectPath": "F:\\projekttttt\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
-        "packagesPath": "C:\\Users\\zsuik\\.nuget\\packages\\",
-        "outputPath": "F:\\projekttttt\\PizzaWeblap\\Backend\\obj\\",
+        "projectPath": "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\PizzaBackend.csproj",
+        "packagesPath": "C:\\Users\\plezerzsombor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\plezerzsombor\\Downloads\\PizzaWeblap\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\zsuik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\plezerzsombor\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
